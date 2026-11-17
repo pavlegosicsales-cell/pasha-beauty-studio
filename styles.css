@@ -154,68 +154,63 @@ ul { margin: 0; padding: 0; list-style: none; }
 .chip--white { background: var(--white); }
 
 
-/* ================= LOADER (snowball spinner, brand colours) ================= */
+/* ================= LOADER ================= */
+/* Original snowball spinner (cssscript.com/animated-snowball-loading-spinner), values unchanged.
+   Only the page background is the site cream instead of the demo's pale blue, and the track
+   cover uses the same colour so the "fresh snow" trail blends into it. */
 .loader {
+  --loader-bg: #f6efe5;
   position: fixed; inset: 0; z-index: 200; display: grid; place-items: center;
-  background: var(--ink); color: var(--gold);
+  background: var(--loader-bg);
+  font-size: calc(16px + (20 - 16) * (100vw - 320px) / (1280 - 320));
   transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), visibility 0.7s;
 }
-.loader::before { content: ""; position: absolute; inset: 0; background: url(images/noise.png) repeat; background-size: 256px; opacity: 0.05; }
 .loader.is-done { opacity: 0; visibility: hidden; }
-.loader.is-done .loader__inner { transform: scale(0.94); }
 .no-loader .loader { display: none; }
-.loader__inner { position: relative; display: flex; flex-direction: column; align-items: center; gap: 28px; transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1); }
-.loader__name { font-size: 12px; line-height: 1.2; font-weight: 700; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(201, 162, 58, 0.8); padding-left: 0.3em; }
-
-.pl { position: relative; width: 16em; height: 16em; font-size: 10px; }
-.pl__outer-ring, .pl__inner-ring, .pl__track-cover, .pl__ball,
-.pl__ball-texture, .pl__ball-outer-shadow, .pl__ball-inner-shadow, .pl__ball-side-shadows { position: absolute; border-radius: 50%; }
-/* track = ring between outer (16em) and inner (10em) */
-.pl__outer-ring {
-  inset: 0;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0) 4.9em, rgba(255, 255, 255, 0.045) 5em, rgba(255, 255, 255, 0.07) 6.5em, rgba(255, 255, 255, 0.045) 8em);
-  box-shadow: 0 0 0 1px rgba(201, 162, 58, 0.22), 0 1.5em 3em rgba(0, 0, 0, 0.35);
+.pl, .pl__ball, .pl__ball-inner-shadow, .pl__ball-side-shadows, .pl__ball-texture, .pl__inner-ring, .pl__outer-ring, .pl__track-cover { border-radius: 50%; }
+.pl { position: relative; width: 16em; height: 16em; }
+.pl__ball, .pl__ball-inner-shadow, .pl__ball-outer-shadow, .pl__ball-side-shadows, .pl__ball-texture, .pl__ball-texture::before, .pl__inner-ring, .pl__outer-ring, .pl__track-cover { position: absolute; }
+.pl__ball, .pl__ball-inner-shadow, .pl__ball-outer-shadow, .pl__ball-texture::before, .pl__track-cover { animation: ball 3s linear infinite; }
+.pl__ball { top: calc(50% - 1.25em); left: calc(50% - 1.25em); transform: rotate(0) translateY(-6.5em); width: 2.5em; height: 2.5em; }
+.pl__ball-inner-shadow {
+  animation-name: ballInnerShadow;
+  box-shadow: 0 0.1em 0.2em hsla(0, 0%, 0%, 0.3), 0 0 0.2em hsla(0, 0%, 0%, 0.1) inset, 0 -1em 0.5em hsla(0, 0%, 0%, 0.15) inset;
+  width: 100%; height: 100%;
+}
+.pl__ball-outer-shadow {
+  animation-name: ballOuterShadow;
+  background-image: linear-gradient(hsla(0, 0%, 0%, 0.15), hsla(0, 0%, 0%, 0));
+  border-radius: 0 0 50% 50% / 0 0 100% 100%;
+  filter: blur(2px);
+  top: 50%; left: 0; width: 100%; height: 250%;
+  transform: rotate(20deg); transform-origin: 50% 0; z-index: -2;
+}
+.pl__ball-side-shadows { background-color: hsla(0, 0%, 0%, 0.1); filter: blur(2px); width: 100%; height: 100%; transform: scale(0.75, 1.1); z-index: -1; }
+.pl__ball-texture { overflow: hidden; width: 100%; height: 100%; transform: translate3d(0, 0, 0); }
+.pl__ball-texture::before {
+  animation-name: ballTexture; animation-duration: 0.25s;
+  background: url(images/snow.jpg) 0 0 / 50% 100%;
+  content: ""; display: block; filter: brightness(1.05);
+  top: 0; right: 0; width: 200%; height: 100%;
 }
 .pl__inner-ring {
-  top: 3em; left: 3em; width: 10em; height: 10em;
-  background: var(--ink);
-  box-shadow: 0 0 0 1px rgba(201, 162, 58, 0.22), inset 0 0.4em 1em rgba(0, 0, 0, 0.5);
+  box-shadow: 0 -0.25em 0.5em hsla(0, 0%, 100%, 0.4), 0 0.5em 0.75em hsla(0, 0%, 100%, 0.4) inset, 0 0.5em 0.375em hsla(0, 0%, 0%, 0.15), 0 -0.5em 0.75em hsla(0, 0%, 0%, 0.15) inset;
+  top: 2.375em; left: 2.375em; width: calc(100% - 4.75em); height: calc(100% - 4.75em);
 }
-/* gold trail the ball leaves behind */
+.pl__outer-ring {
+  box-shadow: 0 -0.45em 0.375em hsla(0, 0%, 0%, 0.15), 0 0.5em 0.75em hsla(0, 0%, 0%, 0.15) inset, 0 0.25em 0.5em hsla(0, 0%, 100%, 0.4), 0 -0.5em 0.75em hsla(0, 0%, 100%, 0.4) inset;
+  top: 0.75em; left: 0.75em; width: calc(100% - 1.5em); height: calc(100% - 1.5em);
+}
 .pl__track-cover {
-  inset: 0;
-  background: conic-gradient(from 0deg, rgba(201, 162, 58, 0) 0deg, rgba(201, 162, 58, 0) 150deg, rgba(201, 162, 58, 0.55) 352deg, rgba(201, 162, 58, 0) 360deg);
-  -webkit-mask: radial-gradient(circle, transparent 5em, #000 5.05em, #000 7.95em, transparent 8em);
-          mask: radial-gradient(circle, transparent 5em, #000 5.05em, #000 7.95em, transparent 8em);
-  animation: trackCover 2s linear infinite;
+  animation-name: trackCover;
+  background-image: conic-gradient(var(--loader-bg) 210deg, rgba(246, 239, 229, 0) 270deg);
+  top: 0; left: 0; width: 100%; height: 100%;
 }
-.pl__mark { position: absolute; left: 50%; top: 50%; width: auto; height: 4.6em; transform: translate(-50%, -52%); opacity: 0.95; }
-.pl__ball {
-  top: 50%; left: 50%; width: 3em; height: 3em; margin: -1.5em 0 0 -1.5em; overflow: hidden;
-  background: #c9a23a;
-  filter: drop-shadow(0 0 0.5em rgba(0, 0, 0, 0.55));
-  animation: ball 2s linear infinite;
-}
-.pl__ball-texture {
-  top: 0; left: -100%; width: 200%; height: 100%; border-radius: 0;
-  background: repeating-linear-gradient(90deg, rgba(255, 244, 205, 0.22) 0 0.3em, rgba(255, 244, 205, 0) 0.3em 0.75em);
-  animation: ballTexture 0.25s linear infinite;
-}
-.pl__ball-outer-shadow { inset: 0; box-shadow: inset 0 0 0 0.08em rgba(255, 240, 200, 0.35); animation: ballOuterShadow 2s linear infinite; }
-.pl__ball-inner-shadow {
-  inset: 0;
-  background:
-    radial-gradient(circle at 32% 26%, rgba(255, 250, 225, 0.95) 0, rgba(255, 238, 180, 0.45) 18%, rgba(255, 238, 180, 0) 42%),
-    radial-gradient(circle at 70% 78%, rgba(70, 48, 6, 0.6) 0, rgba(70, 48, 6, 0) 62%);
-  animation: ballInnerShadow 2s linear infinite;
-}
-.pl__ball-side-shadows { inset: 0; box-shadow: inset 0.45em 0 0.6em rgba(40, 26, 2, 0.35), inset -0.45em 0 0.6em rgba(40, 26, 2, 0.35); }
 @keyframes ball { from { transform: rotate(0) translateY(-6.5em); } 50% { transform: rotate(180deg) translateY(-6em); } to { transform: rotate(360deg) translateY(-6.5em); } }
 @keyframes ballInnerShadow { from { transform: rotate(0); } to { transform: rotate(-360deg); } }
 @keyframes ballOuterShadow { from { transform: rotate(20deg); } to { transform: rotate(-340deg); } }
 @keyframes ballTexture { from { transform: translateX(0); } to { transform: translateX(50%); } }
 @keyframes trackCover { from { transform: rotate(0); } to { transform: rotate(360deg); } }
-@media (max-width: 809.98px) { .pl { font-size: 8px; } }
 
 /* ================= NAV ================= */
 .nav {
