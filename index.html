@@ -23,12 +23,31 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Rethink+Sans:wght@500;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <script>document.documentElement.classList.add("js");try{if(sessionStorage.getItem("pasha-loaded")||matchMedia("(prefers-reduced-motion: reduce)").matches)document.documentElement.classList.add("no-loader")}catch(e){}</script>
 </head>
 <body>
+<!-- page loader: snowball spinner in brand colours, shown once per visit -->
+<div class="loader" id="loader" aria-hidden="true">
+  <div class="loader__inner">
+    <div class="pl">
+      <div class="pl__outer-ring"></div>
+      <div class="pl__inner-ring"></div>
+      <div class="pl__track-cover"></div>
+      <img class="pl__mark" src="images/mark-gold.png" alt="" width="248" height="400">
+      <div class="pl__ball">
+        <div class="pl__ball-texture"></div>
+        <div class="pl__ball-outer-shadow"></div>
+        <div class="pl__ball-inner-shadow"></div>
+        <div class="pl__ball-side-shadows"></div>
+      </div>
+    </div>
+    <p class="loader__name">Pasha Beauty Studio</p>
+  </div>
+</div>
 
 <!-- ============ NAV ============ -->
 <header class="nav" id="nav">
-  <div class="nav__bar">
+  <div class="nav__bar" data-in style="--d:.05s">
     <a class="brand" href="./" aria-label="Pasha Beauty Studio, početna">
       <img class="brand__mark brand__mark--light" src="images/mark-white.png" alt="" width="248" height="400">
       <img class="brand__mark brand__mark--dark" src="images/mark-dark.png" alt="" width="248" height="400">
@@ -73,24 +92,24 @@
     <img class="hero__slide" src="images/ig-pcela.jpg" alt="Dugi nokti sa ručno oslikanom pčelom i šarenim motivima" loading="lazy">
   </div>
   <div class="hero__blur" aria-hidden="true"></div>
-  <div class="hero__dots" role="tablist" aria-label="Fotografije">
+  <div class="hero__dots" role="tablist" aria-label="Fotografije" data-in style="--d:1.05s">
     <button class="hero__dot is-on" aria-label="Fotografija 1"></button>
     <button class="hero__dot" aria-label="Fotografija 2"></button>
     <button class="hero__dot" aria-label="Fotografija 3"></button>
   </div>
   <div class="wrap">
     <div class="hero__top">
-      <div class="pill"><b>#01</b><span>Nail art studio</span></div>
+      <div class="pill" data-in style="--d:.2s"><b>#01</b><span>Nail art studio</span></div>
       <div class="hero__copy">
-        <h1 class="hero__title"><span>Pasha</span></h1>
-        <p class="hero__lead">Ručno oslikani nokti, salonski french i izlivanje po meri, u studiju na Voždovcu. Svaki dizajn je malo umetničko delo, kreirano baš za vas.</p>
+        <h1 class="hero__title" aria-label="Pasha"><span aria-hidden="true" data-letters>Pasha</span></h1>
+        <p class="hero__lead" data-in style="--d:.7s">Ručno oslikani nokti, salonski french i izlivanje po meri, u studiju na Voždovcu. Svaki dizajn je malo umetničko delo, kreirano baš za vas.</p>
       </div>
-      <div class="hero__btns">
+      <div class="hero__btns" data-in style="--d:.82s">
         <a class="btn btn--light" href="#usluge">Pogledaj usluge<span class="btn__arr"><i></i><i></i></span></a>
         <a class="btn btn--glass" href="kontakt.html">Kontakt<span class="btn__arr"><i></i><i></i></span></a>
       </div>
     </div>
-    <a class="hcard" href="#radovi">
+    <a class="hcard" href="#radovi" data-in style="--d:.95s">
       <span class="hcard__img"><img src="images/ig-mystical-world.jpg" alt="Takmičarski set Mystical world nails sa 3D insektima"></span>
       <span class="hcard__body">
         <span class="hcard__plus"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.75 12h16.5M12 3.75v16.5" stroke="#1b1512" stroke-width="3" stroke-linecap="round" fill="none"/></svg></span>

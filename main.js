@@ -9,6 +9,37 @@ const ENDPOINT = '';
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const isPhone = () => innerWidth < 810;
 
+  /* ---------- hero entrance: split title letters, start after fonts load ---------- */
+  const letters = $('[data-letters]');
+  if (letters) {
+    const txt = letters.textContent;
+    letters.textContent = '';
+    [...txt].forEach((ch, i) => {
+      const s = document.createElement('span');
+      s.className = 'hero__letter'; s.textContent = ch;
+      s.style.setProperty('--d', (0.32 + i * 0.06).toFixed(2) + 's');
+      letters.appendChild(s);
+    });
+  }
+  const start = () => requestAnimationFrame(() => requestAnimationFrame(() => document.documentElement.classList.add('is-ready')));
+  const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+  const fontsReady = Promise.race([document.fonts ? document.fonts.ready : Promise.resolve(), wait(1200)]);
+  const loaderEl = $('#loader');
+  const loaderOn = loaderEl && !document.documentElement.classList.contains('no-loader');
+  if (reduced) document.documentElement.classList.add('is-ready');
+  else if (!loaderOn) fontsReady.then(start);
+  else {
+    // keep the loader up until fonts + first hero photo are in (min 1.1s, max 3.5s)
+    const heroImg = $('.hero__slide');
+    const imgReady = heroImg && !heroImg.complete ? new Promise((r) => { heroImg.addEventListener('load', r, { once: true }); heroImg.addEventListener('error', r, { once: true }); }) : Promise.resolve();
+    Promise.race([Promise.all([fontsReady, imgReady, wait(1100)]), wait(3500)]).then(() => {
+      loaderEl.classList.add('is-done');
+      try { sessionStorage.setItem('pasha-loaded', '1'); } catch (e) {}
+      setTimeout(start, 250);
+      setTimeout(() => loaderEl.remove(), 900);
+    });
+  }
+
   /* ---------- smooth scroll (Framer Smooth Scroll = Lenis, intensity 8 -> duration 0.8) ---------- */
   let lenis = null;
   if (window.Lenis && !reduced) {
