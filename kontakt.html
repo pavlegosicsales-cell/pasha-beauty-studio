@@ -3,16 +3,16 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kontakt i zakazivanje | Pasha Beauty Studio</title>
-  <meta name="description" content="Zakažite manikir, gel lak, izlivanje ili nail art u Pasha Beauty Studiju, Vojvode Stepe 232 na Voždovcu. Pišite nam na Instagramu ili popunite formu.">
+  <title>Kontakt | Pasha Beauty Studio</title>
+  <meta name="description" content="Kontakt Pasha Beauty Studija, Vojvode Stepe 232 na Voždovcu. Zakažite termin preko forme ili nam pošaljite poruku na Instagramu @pashabeautystudioo.">
   <link rel="canonical" href="https://pasha-beauty-studio.vercel.app/kontakt.html">
   <link rel="icon" href="images/favicon.png">
   <link rel="apple-touch-icon" href="images/favicon.png">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Pasha Beauty Studio">
   <meta property="og:url" content="https://pasha-beauty-studio.vercel.app/kontakt.html">
-  <meta property="og:title" content="Kontakt i zakazivanje | Pasha Beauty Studio">
-  <meta property="og:description" content="Zakažite manikir, gel lak, izlivanje ili nail art u Pasha Beauty Studiju, Vojvode Stepe 232 na Voždovcu. Pišite nam na Instagramu ili popunite formu.">
+  <meta property="og:title" content="Kontakt | Pasha Beauty Studio">
+  <meta property="og:description" content="Kontakt Pasha Beauty Studija, Vojvode Stepe 232 na Voždovcu. Zakažite termin preko forme ili nam pošaljite poruku na Instagramu @pashabeautystudioo.">
   <meta property="og:image" content="https://pasha-beauty-studio.vercel.app/images/og-image.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -23,19 +23,19 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Rethink+Sans:wght@500;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <script>document.documentElement.classList.add("js")</script>
 </head>
 <body>
-
 <!-- ============ NAV ============ -->
 <header class="nav is-solid" id="nav">
-  <div class="nav__bar">
+  <div class="nav__bar" data-in style="--d:.05s">
     <a class="brand" href="./" aria-label="Pasha Beauty Studio, početna">
       <img class="brand__mark brand__mark--light" src="images/mark-white.png" alt="" width="248" height="400">
       <img class="brand__mark brand__mark--dark" src="images/mark-dark.png" alt="" width="248" height="400">
       <span class="brand__name">Pasha<small>Beauty<br>Studio</small></span>
     </a>
     <div class="nav__actions">
-      <a class="btn btn--light nav__book" href="./#termin">Zakaži termin<span class="btn__arr"><i></i><i></i></span></a>
+      <a class="btn btn--light nav__book" href="rezervacije.html">Zakaži termin<span class="btn__arr"><i></i><i></i></span></a>
       <button class="nav__menu" id="menuBtn" aria-expanded="false" aria-controls="navPanel" aria-label="Otvori meni">
         <span class="burger"><i></i><i></i><i></i></span>
       </button>
@@ -46,11 +46,11 @@
       <div class="nav__inner">
         <nav class="nav__links" aria-label="Glavni meni">
           <a class="nav__link" href="./"><span class="roll"><span>Početna</span><span aria-hidden="true">Početna</span></span></a>
-          <a class="nav__link" href="./#usluge"><span class="roll"><span>Usluge</span><span aria-hidden="true">Usluge</span></span></a>
-          <a class="nav__link" href="./#galerija"><span class="roll"><span>Galerija</span><span aria-hidden="true">Galerija</span></span></a>
-          <a class="nav__link" href="./#edukacija"><span class="roll"><span>Edukacija</span><span aria-hidden="true">Edukacija</span></span></a>
-          <a class="nav__link" href="./#pitanja"><span class="roll"><span>Pitanja</span><span aria-hidden="true">Pitanja</span></span></a>
-          <a class="nav__link" href="kontakt.html"><span class="roll"><span>Kontakt</span><span aria-hidden="true">Kontakt</span></span></a>
+          <a class="nav__link" href="o-nama.html"><span class="roll"><span>O nama</span><span aria-hidden="true">O nama</span></span></a>
+          <a class="nav__link" href="usluge.html"><span class="roll"><span>Usluge</span><span aria-hidden="true">Usluge</span></span></a>
+          <a class="nav__link" href="galerija.html"><span class="roll"><span>Galerija</span><span aria-hidden="true">Galerija</span></span></a>
+          <a class="nav__link" href="rezervacije.html"><span class="roll"><span>Rezervacije</span><span aria-hidden="true">Rezervacije</span></span></a>
+          <a class="nav__link" href="kontakt.html" aria-current="page"><span class="roll"><span>Kontakt</span><span aria-hidden="true">Kontakt</span></span></a>
         </nav>
         <div class="nav__social">
           <a class="social" href="https://www.instagram.com/pashabeautystudioo/" target="_blank" rel="noopener"><span class="ic" style="--i:url(icons/instagram.svg)"></span><span class="roll"><span>Instagram</span><span aria-hidden="true">Instagram</span></span></a>
@@ -63,74 +63,87 @@
 </header>
 
 <main>
-<section class="sec page-hero" id="kontakt">
+<!-- ============ PAGE HERO ============ -->
+<section class="phero">
+  <div class="wrap">
+    <div class="phero__row">
+      <div class="phero__text">
+        <p class="tag" data-in style="--d:.15s">[ javite nam se ]</p>
+        <div class="head__title">
+          <h1 class="h1" data-in style="--d:.25s">Kontakt</h1>
+          <p class="sub" data-in style="--d:.38s">Za termin, pitanje o usluzi ili edukaciji, javite nam se porukom ili preko forme na sajtu.</p>
+        </div>
+        <div class="phero__btns" data-in style="--d:.5s"><a class="btn btn--gold" href="rezervacije.html">Zakaži termin<span class="btn__arr"><i></i><i></i></span></a><a class="btn btn--light" href="usluge.html">Usluge<span class="btn__arr"><i></i><i></i></span></a></div>
+      </div>
+      <a class="scroll-hint" href="#info" data-in style="--d:.6s">Skroluj dole<i></i></a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CONTACT ============ -->
+<section class="sec sec--tight" id="info">
+  <div class="wrap">
+    <div class="cgrid">
+      <div class="cgrid__img"><img src="images/salon-tall.jpg" alt="Enterijer Pasha Beauty Studija sa stolovima za manikir i roze zidom" loading="lazy"></div>
+      <div class="cpanel">
+        <div class="cpanel__blk">
+          <h2 class="cpanel__h">Zakazivanje</h2>
+          <ul class="crows">
+            <li class="crow"><span>Forma na sajtu</span><a href="rezervacije.html">Rezervacije</a></li>
+            <li class="crow"><span>Poruka na Instagramu</span><a href="https://ig.me/m/pashabeautystudioo" target="_blank" rel="noopener">@pashabeautystudioo</a></li>
+            <li class="crow" data-wa-only hidden><span>WhatsApp</span><a href="https://ig.me/m/pashabeautystudioo" target="_blank" rel="noopener" data-contact data-wa-label>Pošalji poruku</a></li>
+          </ul>
+        </div>
+        <div class="cpanel__blk">
+          <h2 class="cpanel__h">Gde smo</h2>
+          <p class="p">Vojvode Stepe 232<br>Voždovac, Beograd</p>
+          <p class="cpanel__note">Na istoj adresi je i Paša Berber</p>
+        </div>
+        <div class="cpanel__blk">
+          <h2 class="cpanel__h">Mreže</h2>
+          <div class="chips">
+            <a class="chip chip--white" href="https://www.instagram.com/pashabeautystudioo/" target="_blank" rel="noopener"><span class="ic" style="--i:url(icons/instagram.svg)"></span><span>Pasha Beauty Studio</span></a>
+            <a class="chip chip--white" href="https://www.instagram.com/mayasubotich/" target="_blank" rel="noopener"><span class="ic" style="--i:url(icons/instagram.svg)"></span><span>Maya Subotić</span></a>
+            <a class="chip chip--white" href="https://www.instagram.com/pashaberberin/" target="_blank" rel="noopener"><span class="ic" style="--i:url(icons/instagram.svg)"></span><span>Paša Berber</span></a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="cinfo">
+      <a class="cinfo__item rise" href="https://www.instagram.com/pashabeautystudioo/" target="_blank" rel="noopener"><span class="cinfo__ic"><svg viewBox="0 0 24 24"><use href="#envelope"/></svg></span><div><h3 class="h-card">Instagram</h3><p class="p">@pashabeautystudioo</p></div></a>
+      <a class="cinfo__item rise" href="rezervacije.html"><span class="cinfo__ic"><svg viewBox="0 0 24 24"><use href="#phone"/></svg></span><div><h3 class="h-card">Rezervacije</h3><p class="p">Forma za termin na sajtu</p></div></a>
+      <a class="cinfo__item rise" href="https://maps.google.com/?q=Vojvode+Stepe+232,+Beograd" target="_blank" rel="noopener"><span class="cinfo__ic"><svg viewBox="0 0 24 24"><use href="#pin"/></svg></span><div><h3 class="h-card">Lokacija</h3><p class="p">Vojvode Stepe 232, Beograd</p></div></a>
+    </div>
+    <div class="map"><iframe title="Mapa: Vojvode Stepe 232, Beograd" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://maps.google.com/maps?q=Vojvode%20Stepe%20232%2C%20Beograd&z=15&output=embed"></iframe></div>
+  </div>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section class="sec" id="pitanja">
   <div class="wrap">
     <div class="head">
       <div class="head__text">
-        <p class="tag">[ kontakt ]</p>
+        <p class="tag">[ česta pitanja ]</p>
         <div class="head__title">
-          <h1 class="h1">Kontakt</h1>
-          <p class="sub">Najbrže nas dobijate porukom na Instagramu. Možete i da popunite formu, javljamo vam se da potvrdimo termin.</p>
+          <h2 class="h1">Pitanja</h2>
+          <p class="sub">Odgovori na ono što nas najčešće pitate u porukama.</p>
         </div>
       </div>
-      <a class="btn btn--gold" href="https://ig.me/m/pashabeautystudioo" target="_blank" rel="noopener">Pošalji poruku<span class="btn__arr"><i></i><i></i></span></a>
+      <a class="btn btn--gold" href="rezervacije.html">Zakaži termin<span class="btn__arr"><i></i><i></i></span></a>
     </div>
-    <div class="cinfo">
-      <div class="cinfo__item"><svg viewBox="0 0 24 24"><use href="#envelope"/></svg><div><h2 class="h-card">Instagram</h2><p class="p"><a href="https://www.instagram.com/pashabeautystudioo/" target="_blank" rel="noopener">@pashabeautystudioo</a>, odgovaramo na poruke u DM-u.</p></div></div>
-      <div class="cinfo__item"><svg viewBox="0 0 24 24"><use href="#pin"/></svg><div><h2 class="h-card">Adresa</h2><p class="p">Vojvode Stepe 232, Voždovac, Beograd. Na istoj adresi je i <a href="https://www.instagram.com/pashaberberin/" target="_blank" rel="noopener">Paša Berber</a>.</p></div></div>
-      <div class="cinfo__item"><svg viewBox="0 0 24 24"><use href="#star"/></svg><div><h2 class="h-card">Edukacija</h2><p class="p">Za online kurs Sam svoj Nail artist (70 €) pišite nam u DM i šaljemo sve detalje.</p></div></div>
+    <div class="faq">
+      <div class="faq__img">
+        <img src="images/ig-srca-belo.jpg" alt="Beli gel lak sa sitnim crvenim srcima" loading="lazy" style="object-position:50% 50%">
+        <a class="btn btn--light" href="kontakt.html">Kontakt<span class="btn__arr"><i></i><i></i></span></a>
+      </div>
+      <div class="faq__list" id="faq">
+        <div class="qa is-open"><button class="qa__q" aria-expanded="true"><span>Kako da zakažem termin?</span><i class="qa__ic"><svg viewBox="0 0 24 24"><use href="#plus"/></svg></i></button><div class="qa__a"><div><p>Popunite formu na strani <a href="rezervacije.html">Rezervacije</a> ili nam pošaljite poruku na Instagramu <a href="https://www.instagram.com/pashabeautystudioo/" target="_blank" rel="noopener">@pashabeautystudioo</a>. Javljamo vam se da potvrdimo tačan dan i sat.</p></div></div></div>
+        <div class="qa"><button class="qa__q" aria-expanded="false"><span>Gde se nalazite?</span><i class="qa__ic"><svg viewBox="0 0 24 24"><use href="#plus"/></svg></i></button><div class="qa__a"><div><p>Vojvode Stepe 232, Voždovac, Beograd. Na istoj adresi je i Paša Berber.</p></div></div></div>
+        <div class="qa"><button class="qa__q" aria-expanded="false"><span>Da li moram da čekam termin kod Maye?</span><i class="qa__ic"><svg viewBox="0 0 24 24"><use href="#plus"/></svg></i></button><div class="qa__a"><div><p>Ne morate. Nokte možete zakazati i kod drugih devojaka iz našeg tima. Sve imaju dugogodišnje iskustvo u izradi i nezi noktiju i rado će vam pomoći da odaberete oblik, boju i dizajn.</p></div></div></div>
+        <div class="qa"><button class="qa__q" aria-expanded="false"><span>Da li radite i pedikir, trepavice i masaže?</span><i class="qa__ic"><svg viewBox="0 0 24 24"><use href="#plus"/></svg></i></button><div class="qa__a"><div><p>Da. Pored noktiju radimo estetski pedikir, lash i brow lift, nadogradnju trepavica i masaže. Ceo cenovnik je na strani <a href="usluge.html">Usluge</a>.</p></div></div></div>
+        <div class="qa"><button class="qa__q" aria-expanded="false"><span>Kako se prijavljujem na kurs?</span><i class="qa__ic"><svg viewBox="0 0 24 24"><use href="#plus"/></svg></i></button><div class="qa__a"><div><p>Online kurs Sam svoj Nail artist košta 70 € i plaća se jednom. Za prijavu i detalje pošaljite nam poruku u DM na Instagramu.</p></div></div></div>
+      </div>
     </div>
-    <div class="book">
-      <form class="wiz" data-wizard novalidate>
-        <div class="wiz__top">
-          <div class="wiz__meta"><span data-step-label>Korak 1 od 3</span><span data-step-name>Usluga</span></div>
-          <div class="wiz__bar"><i data-bar></i></div>
-        </div>
-        <div class="wiz__viewport" data-viewport>
-          <div class="wiz__step" data-step="1">
-            <p class="wiz__q">Šta želite da uradite?</p>
-            <div class="choices" data-group="usluga">
-              <button type="button" class="choice" data-value="Manikir"><span class="ic" style="--i:url(icons/alati.svg)"></span>Manikir</button>
-              <button type="button" class="choice" data-value="Gel lak"><span class="ic" style="--i:url(icons/cetka.svg)"></span>Gel lak</button>
-              <button type="button" class="choice" data-value="Izlivanje noktiju"><span class="ic" style="--i:url(icons/slojevi.svg)"></span>Izlivanje noktiju</button>
-              <button type="button" class="choice" data-value="French"><span class="ic" style="--i:url(icons/kap.svg)"></span>French</button>
-              <button type="button" class="choice" data-value="Ručni nail art"><span class="ic" style="--i:url(icons/iskre.svg)"></span>Ručni nail art</button>
-              <button type="button" class="choice" data-value="Online edukacija"><span class="ic" style="--i:url(icons/kruna.svg)"></span>Online edukacija</button>
-            </div>
-          </div>
-          <div class="wiz__step" data-step="2" hidden>
-            <p class="wiz__q">Kada vam odgovara?</p>
-            <div class="choices" data-group="termin">
-              <button type="button" class="choice" data-value="Ove nedelje"><span class="ic" style="--i:url(icons/iskre.svg)"></span>Ove nedelje</button>
-              <button type="button" class="choice" data-value="Sledeće nedelje"><span class="ic" style="--i:url(icons/iskre-2.svg)"></span>Sledeće nedelje</button>
-              <button type="button" class="choice" data-value="Ovog meseca"><span class="ic" style="--i:url(icons/slojevi.svg)"></span>Ovog meseca</button>
-              <button type="button" class="choice" data-value="Samo se raspitujem"><span class="ic" style="--i:url(icons/telefon-24.svg)"></span>Samo se raspitujem</button>
-            </div>
-          </div>
-          <div class="wiz__step" data-step="3" hidden>
-            <div class="fields">
-              <div class="field"><label for="f-ime">Ime i prezime *</label><input id="f-ime" name="ime" autocomplete="name" placeholder="Ana Petrović" required></div>
-              <div class="field"><label for="f-tel">Telefon *</label><input id="f-tel" name="telefon" type="tel" autocomplete="tel" inputmode="tel" placeholder="06x xxx xxxx" required></div>
-              <div class="field field--full"><label for="f-mail">Email <em>(nije obavezno)</em></label><input id="f-mail" name="email" type="email" autocomplete="email" placeholder="ana@primer.rs"></div>
-              <div class="field field--full"><label for="f-poruka">Poruka <em>(nije obavezno)</em></label><textarea id="f-poruka" name="poruka" placeholder="Ideja za dizajn, dužina, oblik..."></textarea></div>
-            </div>
-          </div>
-          <div class="wiz__step wiz__done" data-step="done" hidden>
-            <span class="ic" style="--i:url(icons/iskre.svg)"></span>
-            <p class="wiz__q">Hvala, zahtev je poslat.</p>
-            <p class="p">Javljamo vam se uskoro da potvrdimo termin. Ako vam je hitno, pišite nam na <a href="https://www.instagram.com/pashabeautystudioo/" target="_blank" rel="noopener">Instagramu</a>.</p>
-          </div>
-        </div>
-        <p class="wiz__err" data-error hidden></p>
-        <div class="wiz__nav" data-nav>
-          <button type="button" class="wiz__back" data-back hidden><i></i>Nazad</button>
-          <button type="button" class="btn btn--gold" data-next disabled>Dalje<span class="btn__arr"><i></i><i></i></span></button>
-        </div>
-        <p class="wiz__note">Slanjem prihvatate <a href="privatnost.html">politiku privatnosti</a>.</p>
-      </form>
-      <div class="book__img"><img src="images/salon-tall.jpg" alt="Enterijer Pasha Beauty Studija sa stolovima za manikir i roze zidom" loading="lazy"></div>
-    </div>
-    <div class="map"><iframe title="Mapa: Vojvode Stepe 232, Beograd" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://maps.google.com/maps?q=Vojvode%20Stepe%20232%2C%20Beograd&z=15&output=embed"></iframe></div>
   </div>
 </section>
 </main>
@@ -141,28 +154,27 @@
     <div class="foot__top">
       <div class="foot__about">
         <a class="brand" href="./"><img class="brand__mark" src="images/mark-white.png" alt="" width="248" height="400"><span class="brand__name">Pasha<small>Beauty<br>Studio</small></span></a>
-        <p>Ručno oslikani nokti, french, gel lak i izlivanje na Voždovcu. Plus online kurs za one koji žele da nauče.</p>
-        <a class="btn btn--light" href="kontakt.html">Kontaktirajte nas<span class="btn__arr"><i></i><i></i></span></a>
+        <p>Nokti, ručni nail art, pedikir, trepavice, obrve i masaže na Voždovcu. Plus online kurs za one koji žele da nauče.</p>
+        <a class="btn btn--light" href="rezervacije.html">Zakaži termin<span class="btn__arr"><i></i><i></i></span></a>
       </div>
       <div class="foot__cols">
         <div class="foot__col"><h4>Brze veze</h4><ul>
           <li><a class="flink" href="./"><span class="roll"><span>Početna</span><span aria-hidden="true">Početna</span></span></a></li>
-          <li><a class="flink" href="./#o-nama"><span class="roll"><span>O nama</span><span aria-hidden="true">O nama</span></span></a></li>
-          <li><a class="flink" href="./#nega"><span class="roll"><span>Nega</span><span aria-hidden="true">Nega</span></span></a></li>
-          <li><a class="flink" href="./#usluge"><span class="roll"><span>Usluge</span><span aria-hidden="true">Usluge</span></span></a></li>
-          <li><a class="flink" href="./#prednosti"><span class="roll"><span>Prednosti</span><span aria-hidden="true">Prednosti</span></span></a></li>
-          <li><a class="flink" href="./#radovi"><span class="roll"><span>Radovi</span><span aria-hidden="true">Radovi</span></span></a></li>
-          <li><a class="flink" href="./#termin"><span class="roll"><span>Zakazivanje</span><span aria-hidden="true">Zakazivanje</span></span></a></li>
+          <li><a class="flink" href="o-nama.html"><span class="roll"><span>O nama</span><span aria-hidden="true">O nama</span></span></a></li>
+          <li><a class="flink" href="usluge.html"><span class="roll"><span>Usluge</span><span aria-hidden="true">Usluge</span></span></a></li>
+          <li><a class="flink" href="galerija.html"><span class="roll"><span>Galerija</span><span aria-hidden="true">Galerija</span></span></a></li>
+          <li><a class="flink" href="rezervacije.html"><span class="roll"><span>Rezervacije</span><span aria-hidden="true">Rezervacije</span></span></a></li>
+          <li><a class="flink" href="kontakt.html"><span class="roll"><span>Kontakt</span><span aria-hidden="true">Kontakt</span></span></a></li>
         </ul></div>
         <div class="foot__col"><h4>Ostalo</h4><ul>
+          <li><a class="flink" href="usluge.html#cenovnik"><span class="roll"><span>Cenovnik</span><span aria-hidden="true">Cenovnik</span></span></a></li>
           <li><a class="flink" href="./#edukacija"><span class="roll"><span>Edukacija</span><span aria-hidden="true">Edukacija</span></span></a></li>
           <li><a class="flink" href="./#pitanja"><span class="roll"><span>Pitanja</span><span aria-hidden="true">Pitanja</span></span></a></li>
-          <li><a class="flink" href="kontakt.html"><span class="roll"><span>Kontakt</span><span aria-hidden="true">Kontakt</span></span></a></li>
           <li><a class="flink" href="privatnost.html"><span class="roll"><span>Privatnost</span><span aria-hidden="true">Privatnost</span></span></a></li>
           <li><a class="flink" href="https://www.instagram.com/pashaberberin/" target="_blank" rel="noopener"><span class="roll"><span>Paša Berber</span><span aria-hidden="true">Paša Berber</span></span></a></li>
         </ul></div>
         <div class="foot__col"><h4>Info</h4><ul>
-          <li><a class="ilink" href="https://ig.me/m/pashabeautystudioo" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><use href="#envelope"/></svg><span class="roll"><span>Poruka na Instagramu</span><span aria-hidden="true">Poruka na Instagramu</span></span></a></li>
+          <li><a class="ilink" href="https://ig.me/m/pashabeautystudioo" target="_blank" rel="noopener" data-contact><svg viewBox="0 0 24 24"><use href="#envelope"/></svg><span class="roll"><span>Pošalji poruku</span><span aria-hidden="true">Pošalji poruku</span></span></a></li>
           <li><a class="ilink" href="https://www.instagram.com/pashabeautystudioo/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><use href="#phone"/></svg><span class="roll"><span>@pashabeautystudioo</span><span aria-hidden="true">@pashabeautystudioo</span></span></a></li>
           <li><a class="ilink" href="https://maps.google.com/?q=Vojvode+Stepe+232,+Beograd" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><use href="#pin"/></svg><span class="roll"><span>Vojvode Stepe 232, Beograd</span><span aria-hidden="true">Vojvode Stepe 232, Beograd</span></span></a></li>
         </ul></div>

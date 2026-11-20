@@ -2,6 +2,9 @@
 
 // Paste the Apps Script URL here after running Skill 03 (form backend setup).
 const ENDPOINT = '';
+// Studio WhatsApp number, international format without + or spaces (e.g. '381641234567').
+// When set: "Pošalji poruku" buttons open WhatsApp and the booking form hands the request to WhatsApp.
+const WA_NUMBER = '';
 
 (() => {
   const $ = (s, r = document) => r.querySelector(s);
@@ -275,9 +278,83 @@ const ENDPOINT = '';
     requestAnimationFrame(tick);
   }
 
-  /* ---------- booking wizard ---------- */
+  /* ---------- message buttons: WhatsApp once the number is known, Instagram DM until then ---------- */
+  if (WA_NUMBER) {
+    $$('[data-contact]').forEach((a) => { a.href = `https://wa.me/${WA_NUMBER}`; });
+    $$('[data-wa-only]').forEach((el) => { el.hidden = false; });
+    $$('[data-wa-label]').forEach((el) => { el.textContent = 'Pošalji poruku'; });
+  }
+
+  /* ---------- gallery: filters + lightbox ---------- */
+  const gal = $('[data-gallery]');
+  if (gal) {
+    const items = $$('.gal__item', gal);
+    const filters = $$('[data-filter]');
+    filters.forEach((f) => f.addEventListener('click', () => {
+      if (f.classList.contains('is-on')) return;
+      filters.forEach((x) => { x.classList.toggle('is-on', x === f); x.setAttribute('aria-pressed', x === f); });
+      const k = f.dataset.filter;
+      const apply = () => items.forEach((it) => { it.hidden = k !== 'sve' && it.dataset.cat !== k; });
+      if (reduced) return apply();
+      gal.classList.add('is-switching');
+      setTimeout(() => { apply(); requestAnimationFrame(() => gal.classList.remove('is-switching')); }, 250);
+    }));
+
+    const lb = $('#lightbox');
+    const lbImg = $('[data-lb-img]', lb), lbCap = $('[data-lb-cap]', lb), lbCount = $('[data-lb-count]', lb), fig = $('.lb__fig', lb);
+    let list = [], at = 0, opener = null;
+    const paint = () => {
+      const img = $('img', list[at]);
+      lbImg.src = img.currentSrc || img.src; lbImg.alt = img.alt;
+      lbCap.textContent = '';
+      const t = list[at].dataset.title;
+      if (t) { const b = document.createElement('b'); b.textContent = t; lbCap.append(b, document.createElement('br')); }
+      lbCap.append(img.alt);
+      lbCount.textContent = `${at + 1} / ${list.length}`;
+    };
+    const go = (d) => {
+      at = (at + d + list.length) % list.length;
+      if (reduced) return paint();
+      fig.classList.add('is-swap');
+      setTimeout(() => { paint(); fig.classList.remove('is-swap'); }, 200);
+    };
+    const open = (it) => {
+      opener = it; list = items.filter((x) => !x.hidden); at = list.indexOf(it);
+      paint(); lb.hidden = false;
+      requestAnimationFrame(() => lb.classList.add('is-on'));
+      if (lenis) lenis.stop();
+      document.documentElement.style.overflow = 'hidden';
+      $('[data-lb-close]', lb).focus({ preventScroll: true });
+    };
+    const close = () => {
+      lb.classList.remove('is-on');
+      setTimeout(() => { lb.hidden = true; }, 350);
+      if (lenis) lenis.start();
+      document.documentElement.style.overflow = '';
+      if (opener) opener.focus({ preventScroll: true });
+    };
+    items.forEach((it) => it.addEventListener('click', () => open(it)));
+    $('[data-lb-close]', lb).addEventListener('click', close);
+    $('[data-lb-prev]', lb).addEventListener('click', () => go(-1));
+    $('[data-lb-next]', lb).addEventListener('click', () => go(1));
+    lb.addEventListener('click', (e) => { if (e.target === lb) close(); });
+    addEventListener('keydown', (e) => {
+      if (lb.hidden) return;
+      if (e.key === 'Escape') close();
+      if (e.key === 'ArrowLeft') go(-1);
+      if (e.key === 'ArrowRight') go(1);
+    });
+    let sx = 0;
+    lb.addEventListener('touchstart', (e) => { sx = e.touches[0].clientX; }, { passive: true });
+    lb.addEventListener('touchend', (e) => { const dx = e.changedTouches[0].clientX - sx; if (Math.abs(dx) > 50) go(dx < 0 ? 1 : -1); });
+  }
+
+  /* ---------- booking wizard (3 steps on the home page, 4 on Rezervacije) ---------- */
+  const priceData = (() => { try { const j = $('#cenovnik'); return j ? JSON.parse(j.textContent) : null; } catch (e) { return null; } })();
   $$('[data-wizard]').forEach((form) => {
     const steps = $$('[data-step]', form);
+    const flow = steps.filter((s) => s.dataset.step !== 'done');
+    const total = flow.length;
     const vp = $('[data-viewport]', form);
     const next = $('[data-next]', form);
     const back = $('[data-back]', form);
@@ -286,11 +363,10 @@ const ENDPOINT = '';
     const name = $('[data-step-name]', form);
     const err = $('[data-error]', form);
     const navRow = $('[data-nav]', form);
-    const names = ['Usluga', 'Termin', 'Vaši podaci'];
+    const dyn = $('[data-dynamic]', form);
     const data = {};
-    let step = 1, busy = false;
+    let idx = 0, busy = false;
 
-    const stepEl = (n) => steps.find((s) => s.dataset.step === String(n));
     const lockHeight = (fn) => {
       const from = vp.offsetHeight;
       vp.style.height = from + 'px';
@@ -301,45 +377,61 @@ const ENDPOINT = '';
       vp.addEventListener('transitionend', done);
       setTimeout(done, 1000);
     };
+    const isChoiceStep = (el) => !!$('.choices', el);
     const canNext = () => {
-      if (step === 1) return !!data.usluga;
-      if (step === 2) return !!data.termin;
-      return true;
+      const g = $('.choices', flow[idx]);
+      return !g || !!data[g.dataset.group];
     };
-    const render = (n) => {
+    const render = (i) => {
       lockHeight(() => {
         steps.forEach((s) => { s.hidden = true; s.classList.remove('is-enter'); });
-        const el = stepEl(n); el.hidden = false; el.classList.add('is-enter');
+        const el = i === 'done' ? steps.find((s) => s.dataset.step === 'done') : flow[i];
+        el.hidden = false; el.classList.add('is-enter');
       });
-      if (n === 'done') {
+      if (i === 'done') {
         navRow.hidden = true; bar.style.width = '100%';
         label.textContent = 'Poslato'; name.textContent = '';
         return;
       }
-      step = n;
-      bar.style.width = (n / 3) * 100 + '%';
-      label.textContent = `Korak ${n} od 3`;
-      name.textContent = names[n - 1];
-      back.hidden = n === 1;
-      next.hidden = n < 3; // choice steps advance on tap, so no extra button there
+      idx = i;
+      bar.style.width = ((i + 1) / total) * 100 + '%';
+      label.textContent = `Korak ${i + 1} od ${total}`;
+      name.textContent = flow[i].dataset.name || '';
+      back.hidden = i === 0;
+      next.hidden = isChoiceStep(flow[i]); // choice steps advance on tap, so no extra button there
       next.disabled = !canNext();
-      next.firstChild.textContent = n === 3 ? 'Pošalji zahtev' : 'Dalje';
+      next.firstChild.textContent = i === total - 1 ? 'Pošalji zahtev' : 'Dalje';
       err.hidden = true;
     };
 
-    $$('.choices', form).forEach((group) => {
-      const key = group.dataset.group;
-      $$('.choice', group).forEach((btn) => btn.addEventListener('click', () => {
-        $$('.choice', group).forEach((b) => b.classList.remove('is-on'));
-        btn.classList.add('is-on');
-        data[key] = btn.dataset.value;
-        next.disabled = false;
-        // single choice auto-advances after a short beat so the selection is visible
-        setTimeout(() => { if (step < 3 && stepEl(step).contains(btn)) render(step + 1); }, 260);
-      }));
+    const select = (btn, group) => {
+      $$('.choice', group).forEach((b) => b.classList.remove('is-on'));
+      btn.classList.add('is-on');
+      data[group.dataset.group] = btn.dataset.value;
+      // picking a category refills the "which service" step from the price list
+      if (btn.dataset.slug && dyn && group !== dyn) fillServices(btn.dataset.slug);
+    };
+    const bind = (btn, group) => btn.addEventListener('click', () => {
+      select(btn, group);
+      next.disabled = false;
+      // single choice auto-advances after a short beat so the selection is visible
+      setTimeout(() => { if (idx < total - 1 && flow[idx].contains(btn)) render(idx + 1); }, 260);
     });
+    const fillServices = (slug) => {
+      const list = (priceData && priceData[slug]) || [];
+      delete data[dyn.dataset.group];
+      dyn.textContent = '';
+      list.forEach(([n, p]) => {
+        const b = document.createElement('button');
+        b.type = 'button'; b.className = 'choice'; b.dataset.value = n;
+        const s = document.createElement('span'); s.textContent = n; b.appendChild(s);
+        if (p) { const sm = document.createElement('small'); sm.textContent = p; b.appendChild(sm); }
+        dyn.appendChild(b); bind(b, dyn);
+      });
+    };
+    $$('.choices', form).forEach((group) => { if (group !== dyn) $$('.choice', group).forEach((btn) => bind(btn, group)); });
 
-    back.addEventListener('click', () => { if (step > 1) render(step - 1); });
+    back.addEventListener('click', () => { if (idx > 0) render(idx - 1); });
 
     const validate = () => {
       let ok = true;
@@ -358,18 +450,31 @@ const ENDPOINT = '';
 
     next.addEventListener('click', async () => {
       if (busy) return;
-      if (step < 3) { if (canNext()) render(step + 1); return; }
+      if (idx < total - 1) { if (canNext()) render(idx + 1); return; }
       if (!validate()) { err.textContent = 'Upišite ime i broj telefona da bismo mogli da vam se javimo.'; err.hidden = false; return; }
+      if (!ENDPOINT && !WA_NUMBER) {
+        err.innerHTML = 'Slanje preko sajta još nije uključeno. Pišite nam na <a href="https://ig.me/m/pashabeautystudioo" target="_blank" rel="noopener">Instagramu</a> i zakazujemo odmah.';
+        err.hidden = false; return;
+      }
       busy = true; next.disabled = true; err.hidden = true;
       const payload = {
-        usluga: data.usluga, termin: data.termin,
+        kategorija: data.kategorija || '', usluga: data.usluga || '', termin: data.termin || '',
         ime: form.elements.ime.value.trim(), telefon: form.elements.telefon.value.trim(),
         email: form.elements.email.value.trim(), poruka: form.elements.poruka.value.trim(),
         stranica: location.pathname
       };
+      // WhatsApp opens synchronously inside the click, otherwise the browser blocks the new tab
+      if (WA_NUMBER) {
+        const txt = ['Zdravo, želim da zakažem termin.',
+          `Usluga: ${payload.kategorija}${payload.usluga ? ', ' + payload.usluga : ''}`,
+          `Kada: ${payload.termin}`, `Ime: ${payload.ime}`, `Telefon: ${payload.telefon}`,
+          payload.poruka ? `Poruka: ${payload.poruka}` : ''].filter(Boolean).join('\n');
+        window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(txt)}`, '_blank', 'noopener');
+        const dt = $('[data-done-text]', form);
+        if (dt && !ENDPOINT) dt.textContent = 'Otvorili smo WhatsApp sa vašim zahtevom. Pošaljite poruku i javljamo vam se da potvrdimo termin.';
+      }
       try {
-        if (!ENDPOINT) throw new Error('no-endpoint');
-        await fetch(ENDPOINT, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(payload) });
+        if (ENDPOINT) await fetch(ENDPOINT, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(payload) });
         render('done');
       } catch (e) {
         err.innerHTML = 'Slanje trenutno nije moguće. Pišite nam na <a href="https://ig.me/m/pashabeautystudioo" target="_blank" rel="noopener">Instagramu</a> i zakazujemo odmah.';
@@ -378,12 +483,17 @@ const ENDPOINT = '';
       } finally { busy = false; }
     });
 
-    // "Zakaži uslugu" buttons preselect the service
-    $$('[data-service]').forEach((a) => a.addEventListener('click', () => {
-      const btn = $$('.choice', form).find((b) => b.dataset.value === a.dataset.service);
-      if (btn) { $$('.choice', btn.parentNode).forEach((b) => b.classList.remove('is-on')); btn.classList.add('is-on'); data.usluga = btn.dataset.value; render(2); }
-    }));
+    // "Zakaži uslugu" buttons (and ?usluga=slug on Rezervacije) preselect the category
+    const first = $('.choices', flow[0]);
+    const preselect = (slug) => {
+      const btn = $$('.choice', first).find((b) => b.dataset.slug === slug || b.dataset.value === slug);
+      if (!btn) return false;
+      select(btn, first); render(1); return true;
+    };
+    $$('[data-service]').forEach((a) => a.addEventListener('click', () => preselect(a.dataset.service)));
 
-    render(1);
+    render(0);
+    const q = new URLSearchParams(location.search).get('usluga');
+    if (q) preselect(q);
   });
 })();
