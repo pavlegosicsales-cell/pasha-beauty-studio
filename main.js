@@ -119,7 +119,7 @@ const WA_NUMBER = '';
     const toFluid = (s) => {
       if (!window.PashaFluid || !fluidHost) return;
       fluidHost.style.filter = getComputedStyle(s).filter;
-      window.PashaFluid.show(s.currentSrc || s.src).then(() => {
+      window.PashaFluid.show(s.currentSrc || s.src, parseFloat(s.dataset.focus)).then(() => {
         fluidHost.classList.remove('is-zoom'); void fluidHost.offsetWidth; fluidHost.classList.add('is-zoom');
       });
     };

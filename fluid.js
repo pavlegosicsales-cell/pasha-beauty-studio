@@ -119,12 +119,16 @@ precision highp float; precision highp sampler2D;
 varying vec2 vUv;
 uniform float u_ratio; uniform float u_img_ratio; uniform float u_disturb_power;
 uniform sampler2D u_output_texture; uniform sampler2D u_velocity_texture; uniform sampler2D u_text_texture;
-uniform float u_canvas_scale; uniform float u_inner_scale;
+uniform float u_canvas_scale; uniform float u_inner_scale; uniform float u_focus;
 vec2 get_img_uv() {
   vec2 uv = vUv - 0.5; uv *= u_canvas_scale; uv /= u_inner_scale;
   vec2 scale = vec2(1.0);
   if (u_ratio > u_img_ratio) scale.y = u_img_ratio / u_ratio; else scale.x = u_ratio / u_img_ratio;
-  uv *= scale; return uv + 0.5;
+  uv *= scale;
+  // u_focus = vertical focus of a tall photo, 0 top .. 1 bottom (texture y is flipped, so 1 - focus)
+  float lim = (1.0 - scale.y) * 0.5;
+  uv.y += clamp(0.5 - u_focus, -lim, lim);
+  return uv + 0.5;
 }
 vec2 get_frame_uv() { vec2 uv = vUv - 0.5; uv *= u_canvas_scale; uv /= u_inner_scale; return uv + 0.5; }
 float frame_alpha(vec2 uv, float w) {
@@ -207,7 +211,7 @@ void main () {
   const pointer = { x: 0.65 * host.clientWidth, y: 0.5 * host.clientHeight, dx: 0, dy: 0, moved: false };
   const grid = { w: 0, h: 0 };
   let out, vel, div, pres, raf = null, frames = 1, last = 0, visible = true, tabOn = document.visibilityState === 'visible';
-  let imgRatio = 1, current = null;
+  let imgRatio = 1, current = null, focus = 0.5;
   const textures = new Map();
 
   const size = () => {
@@ -297,6 +301,7 @@ void main () {
     gl.uniform1i(P.show.uniforms.u_velocity_texture, vel.read().attach(2));
     gl.uniform1f(P.show.uniforms.u_ratio, ratio);
     gl.uniform1f(P.show.uniforms.u_img_ratio, imgRatio);
+    gl.uniform1f(P.show.uniforms.u_focus, focus);
     gl.uniform1f(P.show.uniforms.u_disturb_power, cfg.distortionPower);
     gl.uniform1i(P.show.uniforms.u_output_texture, out.read().attach(1));
     gl.uniform1f(P.show.uniforms.u_canvas_scale, 1);
@@ -328,11 +333,11 @@ void main () {
   // public hook used by the slideshow in main.js
   let request = 0;
   window.PashaFluid = {
-    show(src) {
+    show(src, f) {
       const id = ++request;
       return loadTexture(src).then((v) => {
         if (id !== request) return; // a newer slide was requested while this one loaded
-        current = v.tex; imgRatio = v.ratio;
+        current = v.tex; imgRatio = v.ratio; focus = f == null || isNaN(f) ? 0.5 : f;
         host.classList.add('is-gl');
         kick(2);
       }).catch(() => {});
