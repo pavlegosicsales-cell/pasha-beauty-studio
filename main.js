@@ -233,10 +233,18 @@ const WA_NUMBER = '';
     dot.className = 'cursor-dot'; dot.setAttribute('aria-hidden', 'true');
     document.body.appendChild(dot);
   }
-  let mx = -100, my = -100, cx = -100, cy = -100, curRaf = 0, seen = false;
-  const placeCursor = () => {
-    cx += (mx - cx) * 0.35; cy += (my - cy) * 0.35;
+  let mx = -100, my = -100, cx = -100, cy = -100, curRaf = 0, seen = false, lastT = 0;
+  // Measured on salonix.framer.website: the square halves its remaining distance every ~108 ms with no
+  // overshoot, i.e. exponential follow with a time constant of ~156 ms. Time based, so the lag is the
+  // same on 60 Hz and 144 Hz screens.
+  const CURSOR_TAU = 156;
+  const placeCursor = (t) => {
+    const dt = lastT ? Math.min(250, t - lastT) : 16.7;
+    lastT = t;
+    const k = 1 - Math.exp(-dt / CURSOR_TAU);
+    cx += (mx - cx) * k; cy += (my - cy) * k;
     if (Math.abs(mx - cx) < 0.1 && Math.abs(my - cy) < 0.1) { cx = mx; cy = my; }
+    if (cx === mx && cy === my) lastT = 0;
     if (dot) dot.style.transform = `translate3d(${cx - 5}px, ${cy}px, 0)`;
     if (cursorBtn) cursorBtn.style.transform = `translate3d(${cx - cursorBtn.offsetWidth / 2}px, ${cy}px, 0)`;
     curRaf = cx !== mx || cy !== my ? requestAnimationFrame(placeCursor) : 0;
