@@ -853,6 +853,16 @@ a.cinfo__item { transition: background-color 0.3s ease; }
 .qa__a a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
 .nav__link[aria-current="page"] { color: var(--gold-ink); }
 
+/* scroll fill (B-Steel / Konstra): light background, so letters light up from taupe to warm black */
+.fill-word { display: inline-block; white-space: nowrap; }
+.fill-char { display: inline-block; color: var(--fill-on, var(--ink)); }
+.js-scroll-fill .fill-char { opacity: calc(0.2 + 0.8 * var(--t, 0)); }
+@supports (color: color-mix(in srgb, red 50%, blue)) {
+  .js-scroll-fill .fill-char {
+    color: color-mix(in srgb, var(--fill-on, var(--ink)) calc(var(--t, 0) * 100%), var(--fill-off, #b9ab98));
+  }
+}
+
 /* ================= TABLET 810-1199 ================= */
 @media (max-width: 1199.98px) {
   :root { --pad-x: 22px; --h1: 72px; --h-card: 24px; --statement: 26px; }

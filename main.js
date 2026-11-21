@@ -163,6 +163,55 @@ const WA_NUMBER = '';
     update();
   }
 
+  /* ---------- scroll fill (ported 1:1 from B-Steel / Konstra): the text splits into letters and each
+     letter lights up over its own slice of the scroll range. Range: from the moment the top of the
+     block reaches 70% of the viewport until it reaches 30%. Letter i owns [i/n, (i+1)/n] of that range.
+     JS only writes --t per letter; CSS turns it into opacity .2 -> 1 and colour off -> on. ---------- */
+  const fillBlocks = $$('[data-scroll-fill]');
+  if (fillBlocks.length && !reduced) {
+    const items = fillBlocks.map((block) => {
+      const text = block.textContent.trim();
+      const frag = document.createDocumentFragment();
+      const chars = [];
+      text.split(/\s+/).forEach((word, wi, all) => {
+        const w = document.createElement('span');
+        w.className = 'fill-word';
+        [...word].forEach((ch) => {
+          const c = document.createElement('span');
+          c.className = 'fill-char'; c.textContent = ch;
+          w.appendChild(c); chars.push(c);
+        });
+        frag.appendChild(w);
+        // the space stays between words so line breaks behave normally
+        if (wi < all.length - 1) frag.appendChild(document.createTextNode(' '));
+      });
+      block.setAttribute('aria-label', text);
+      block.textContent = '';
+      block.appendChild(frag);
+      return { el: block, chars, last: [] };
+    });
+    document.documentElement.classList.add('js-scroll-fill');
+    let fillTick = false;
+    const paintFill = () => {
+      fillTick = false;
+      const vh = innerHeight;
+      items.forEach((item) => {
+        const top = item.el.getBoundingClientRect().top;
+        const p = Math.max(0, Math.min(1, (0.7 * vh - top) / (0.4 * vh)));
+        const n = item.chars.length;
+        for (let i = 0; i < n; i++) {
+          const t = Math.round(Math.max(0, Math.min(1, (p - i / n) * n)) * 100) / 100;
+          if (item.last[i] === t) continue; // only touch the DOM when the value changes
+          item.last[i] = t;
+          item.chars[i].style.setProperty('--t', t);
+        }
+      });
+    };
+    addEventListener('scroll', () => { if (!fillTick) { fillTick = true; requestAnimationFrame(paintFill); } }, { passive: true });
+    addEventListener('resize', paintFill);
+    paintFill();
+  }
+
   /* ---------- 4-panel strip: click expands one panel, click again restores ---------- */
   const strip = $('#strip');
   if (strip) {
