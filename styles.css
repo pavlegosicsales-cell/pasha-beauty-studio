@@ -722,10 +722,17 @@ ul { margin: 0; padding: 0; list-style: none; }
 
 .chead { max-width: 640px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 20px; text-align: center; }
 .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-.stat { position: relative; height: 450px; overflow: hidden; padding: 34px; display: flex; flex-direction: column; justify-content: flex-end; color: var(--white); }
+.stat { position: relative; height: 450px; overflow: hidden; padding: 32px 32px 26px; display: flex; flex-direction: column; justify-content: flex-end; gap: 8px; color: var(--white); }
 .stat > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform var(--sp-sol-d) var(--sp-sol); }
-.stat::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0.62) 100%); }
-.stat__n, .stat__l { position: relative; z-index: 1; }
+/* Salonix stat card: no dark gradient, a 50px backdrop blur that fades in from half height (mask 50% -> 78%) */
+.stat::after {
+  content: ""; position: absolute; inset: 0 0 -6px; z-index: 6; pointer-events: none;
+  background: rgba(0, 0, 0, 0.18); /* our photos are lighter than the template's; keeps white text readable */
+  -webkit-backdrop-filter: blur(50px); backdrop-filter: blur(50px);
+  -webkit-mask: linear-gradient(180deg, rgba(0, 0, 0, 0) 50.09%, #000 77.84%);
+          mask: linear-gradient(180deg, rgba(0, 0, 0, 0) 50.09%, #000 77.84%);
+}
+.stat__n, .stat__l { position: relative; z-index: 9; }
 .stat__n { font-size: 56px; line-height: 1.2; font-weight: 700; display: flex; }
 .stat__l { font-size: 20px; line-height: 1.35; font-weight: 700; text-transform: uppercase; }
 @media (hover: hover) { .stat:hover > img { transform: scale(1.05); } }
