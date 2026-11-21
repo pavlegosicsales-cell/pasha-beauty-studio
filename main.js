@@ -282,6 +282,18 @@ const WA_NUMBER = '';
   if (isPhone()) svcs.forEach((s) => { s.classList.add('is-open'); $('.svc__head', s).setAttribute('aria-expanded', 'true'); });
   accordion($$('.qa'), '.qa__q');
 
+  /* ---------- orbit cards: bottom blur = blurred copy of the photo, masked (see .wcard__blur) ---------- */
+  $$('.wcard__img').forEach((w) => {
+    const img = $('img', w);
+    if (!img) return;
+    const b = document.createElement('span');
+    b.className = 'wcard__blur'; b.setAttribute('aria-hidden', 'true');
+    const i = document.createElement('i');
+    i.style.backgroundImage = `url("${img.getAttribute('src')}")`;
+    b.appendChild(i);
+    img.after(b);
+  });
+
   /* ---------- entrance (Framer appear: threshold .5, once) ---------- */
   const rise = $$('.rise');
   if ('IntersectionObserver' in window && !reduced) {

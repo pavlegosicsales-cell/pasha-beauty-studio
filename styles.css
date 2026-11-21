@@ -554,9 +554,14 @@ ul { margin: 0; padding: 0; list-style: none; }
 .wcard { width: 254px; background: var(--white); padding: 5px; display: flex; flex-direction: column; gap: 5px; }
 .wcard__img { position: relative; height: 240px; overflow: hidden; }
 .wcard__img img { width: 100%; height: 100%; object-fit: cover; }
-.wcard__img::after { content: ""; position: absolute; inset: 0 0 -6px; z-index: 6; pointer-events: none;
-  -webkit-backdrop-filter: blur(50px); backdrop-filter: blur(50px); background: rgba(0, 0, 0, 0.18);
-  -webkit-mask: linear-gradient(180deg, rgba(0, 0, 0, 0) 50.09%, #000 77.84%); mask: linear-gradient(180deg, rgba(0, 0, 0, 0) 50.09%, #000 77.84%); }
+/* Orbit cards spin, and Chrome drops the mask of a backdrop-filter inside an animated transform (the
+   whole photo got blurred). So the bottom blur here is a blurred copy of the photo, masked to the
+   bottom part (same 50% -> 78% ramp as Salonix). main.js adds the copy. */
+.wcard__blur {
+  position: absolute; inset: 0; z-index: 6; overflow: hidden; pointer-events: none;
+  -webkit-mask: linear-gradient(180deg, rgba(0, 0, 0, 0) 50.09%, #000 77.84%); mask: linear-gradient(180deg, rgba(0, 0, 0, 0) 50.09%, #000 77.84%);
+}
+.wcard__blur i { position: absolute; inset: -60px; background: center / cover no-repeat; filter: blur(40px) brightness(0.82); }
 .wcard__over { position: absolute; left: 12px; right: 12px; bottom: 12px; z-index: 9; color: var(--white); display: flex; flex-direction: column; gap: 6px; }
 .wcard__label { display: flex; align-items: center; gap: 6px; font-size: 12px; line-height: 1.6; letter-spacing: -0.03em; }
 .wcard__label svg { width: 12px; height: 12px; }
