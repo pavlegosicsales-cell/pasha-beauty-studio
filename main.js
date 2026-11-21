@@ -223,32 +223,45 @@ const WA_NUMBER = '';
     }));
   }
 
-  /* ---------- problem / solution cards ---------- */
+  /* ---------- custom cursor (Salonix "01"): 10px square, centred horizontally on the pointer with its
+     top edge on it. Over a problem card it becomes the "Pogledaj rešenje" button (same anchor). ---------- */
   const cursorBtn = $('#cursorBtn');
-  let cx = 0, cy = 0, tx = 0, ty = 0, cursorRaf = 0;
-  const follow = () => {
-    cx += (tx - cx) * 0.22; cy += (ty - cy) * 0.22;
-    cursorBtn.style.setProperty('--x', cx + 'px'); cursorBtn.style.setProperty('--y', cy + 'px');
-    cursorRaf = requestAnimationFrame(follow);
+  const finePointer = matchMedia('(hover: hover) and (pointer: fine)').matches;
+  let dot = null;
+  if (finePointer && !reduced) {
+    dot = document.createElement('div');
+    dot.className = 'cursor-dot'; dot.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(dot);
+  }
+  let mx = -100, my = -100, cx = -100, cy = -100, curRaf = 0, seen = false;
+  const placeCursor = () => {
+    cx += (mx - cx) * 0.35; cy += (my - cy) * 0.35;
+    if (Math.abs(mx - cx) < 0.1 && Math.abs(my - cy) < 0.1) { cx = mx; cy = my; }
+    if (dot) dot.style.transform = `translate3d(${cx - 5}px, ${cy}px, 0)`;
+    if (cursorBtn) cursorBtn.style.transform = `translate3d(${cx - cursorBtn.offsetWidth / 2}px, ${cy}px, 0)`;
+    curRaf = cx !== mx || cy !== my ? requestAnimationFrame(placeCursor) : 0;
   };
+  if (dot) {
+    addEventListener('pointermove', (e) => {
+      if (e.pointerType !== 'mouse') return;
+      mx = e.clientX; my = e.clientY;
+      if (!seen) { cx = mx; cy = my; seen = true; dot.classList.add('is-on'); }
+      if (!curRaf) curRaf = requestAnimationFrame(placeCursor);
+    }, { passive: true });
+    document.documentElement.addEventListener('mouseleave', () => { dot.classList.remove('is-on'); seen = false; });
+  }
   $$('.sol').forEach((card) => {
-    const toggle = () => {
-      const open = card.classList.toggle('is-open');
-      card.setAttribute('aria-pressed', open);
-      if (cursorBtn) cursorBtn.firstChild.textContent = open ? 'Zatvori ' : 'Pogledaj rešenje ';
-    };
+    const label = () => { if (cursorBtn) cursorBtn.firstChild.textContent = card.classList.contains('is-open') ? 'Zatvori ' : 'Pogledaj rešenje '; };
+    const toggle = () => { const open = card.classList.toggle('is-open'); card.setAttribute('aria-pressed', open); label(); };
     card.addEventListener('click', toggle);
     card.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); } });
-    if (!cursorBtn) return;
+    if (!cursorBtn || !dot) return;
     card.addEventListener('pointerenter', (e) => {
       if (e.pointerType !== 'mouse') return;
-      tx = cx = e.clientX - 20; ty = cy = e.clientY - 16;
-      cursorBtn.firstChild.textContent = card.classList.contains('is-open') ? 'Zatvori ' : 'Pogledaj rešenje ';
-      cursorBtn.classList.add('is-on');
-      cancelAnimationFrame(cursorRaf); follow();
+      label(); cursorBtn.classList.add('is-on'); dot.classList.add('is-off');
+      if (!curRaf) curRaf = requestAnimationFrame(placeCursor);
     });
-    card.addEventListener('pointermove', (e) => { tx = e.clientX - 20; ty = e.clientY - 16; });
-    card.addEventListener('pointerleave', () => { cursorBtn.classList.remove('is-on'); setTimeout(() => cancelAnimationFrame(cursorRaf), 300); });
+    card.addEventListener('pointerleave', () => { cursorBtn.classList.remove('is-on'); dot.classList.remove('is-off'); });
   });
 
   /* ---------- accordions (services, FAQ): one open at a time ---------- */
@@ -299,8 +312,13 @@ const WA_NUMBER = '';
 
   /* ---------- process tabs: hover / tap activates ---------- */
   const tabs = $$('.ptab');
-  tabs.forEach((t) => {
-    const on = () => { tabs.forEach((x) => x.classList.remove('is-on')); t.classList.add('is-on'); };
+  const procImgs = $$('.proc__img');
+  tabs.forEach((t, i) => {
+    const on = () => {
+      tabs.forEach((x) => x.classList.remove('is-on')); t.classList.add('is-on');
+      // each tab has its own photo (Salonix), cross-faded
+      procImgs.forEach((im, j) => { if (j === i) im.loading = 'eager'; im.classList.toggle('is-on', j === i); });
+    };
     t.addEventListener('pointerenter', on);
     t.addEventListener('click', on);
   });
@@ -398,12 +416,20 @@ const WA_NUMBER = '';
     lb.addEventListener('touchend', (e) => { const dx = e.changedTouches[0].clientX - sx; if (Math.abs(dx) > 50) go(dx < 0 ? 1 : -1); });
   }
 
-  /* ---------- booking wizard (3 steps on the home page, 4 on Rezervacije) ---------- */
-  const priceData = (() => { try { const j = $('#cenovnik'); return j ? JSON.parse(j.textContent) : null; } catch (e) { return null; } })();
+  /* ---------- booking wizard: every item of the price list can be booked ----------
+     Steps adapt to the choice: Kategorija -> Usluga -> (Dužina / Tehnika if the service has
+     variants) -> (Dodaci if the category has extras) -> Termin -> Vaši podaci.
+     A summary bar above the question shows every answer so far (click = go back to that step)
+     plus an estimated price and duration. Data comes from the price list JSON inside the form. */
+  const UNSURE = 'Nisam sigurna, posavetujte me';
+  const toNum = (p) => +String(p || '').replace(/[^\d]/g, '') || 0;
+  const fmt = (n) => n.toLocaleString('sr-Latn-RS');
+  const mins = (t) => { const m = /^(\d+)\s*min$/.exec(t || ''); return m ? +m[1] : 0; };
   $$('[data-wizard]').forEach((form) => {
+    let cats;
+    try { cats = JSON.parse($('[data-cenovnik]', form).textContent).cats; } catch (e) { return; }
+    const step = (k) => $(`[data-step="${k}"]`, form);
     const steps = $$('[data-step]', form);
-    const flow = steps.filter((s) => s.dataset.step !== 'done');
-    const total = flow.length;
     const vp = $('[data-viewport]', form);
     const next = $('[data-next]', form);
     const back = $('[data-back]', form);
@@ -412,9 +438,138 @@ const WA_NUMBER = '';
     const name = $('[data-step-name]', form);
     const err = $('[data-error]', form);
     const navRow = $('[data-nav]', form);
-    const dyn = $('[data-dynamic]', form);
-    const data = {};
-    let idx = 0, busy = false;
+    const sum = $('[data-summary]', form);
+    const chipsEl = $('[data-chips]', form);
+    const totalEl = $('[data-total]', form);
+    const st = { cat: null, svc: null, variant: null, addons: [], addonsSeen: false, termin: null };
+    let cur = 'kategorija', busy = false;
+
+    const catObj = () => cats.find((c) => c.slug === st.cat) || null;
+    const svcObj = () => { const c = catObj(); return c && st.svc ? c.services.find((s) => s.n === st.svc) || null : null; };
+    const variantObj = () => { const s = svcObj(); return s && s.v ? s.v.find((v) => v.n === st.variant) || null : null; };
+    const addonList = () => {
+      const c = catObj(), s = svcObj();
+      if (!c || !c.addons || !s) return [];
+      return c.addons.filter((a) => (!a.for || a.for.includes(s.n)) && !(a.skip && a.skip.some((w) => s.n.toLowerCase().includes(w))));
+    };
+    const flow = () => {
+      const f = ['kategorija', 'usluga'];
+      const s = svcObj();
+      if (s && s.v) f.push('varijanta');
+      if (addonList().length) f.push('dodaci');
+      f.push('termin', 'podaci');
+      return f;
+    };
+    const stepName = (k) => ({
+      kategorija: 'Kategorija', usluga: 'Usluga', termin: 'Termin', podaci: 'Vaši podaci',
+      varijanta: (svcObj() && svcObj().vt) || 'Izbor', dodaci: (catObj() && catObj().at) || 'Dodaci'
+    })[k];
+    const meta = (o, plus) => [o.p ? `${plus ? '+' : ''}${o.p} din${o.per ? ' po noktu' : ''}` : '', o.t].filter(Boolean).join(' · ');
+    const choiceBtn = (title, sub, on, check) => {
+      const b = document.createElement('button');
+      b.type = 'button'; b.className = 'choice' + (check ? ' choice--check' : '') + (on ? ' is-on' : '');
+      const s = document.createElement('span'); s.textContent = title; b.appendChild(s);
+      if (sub) { const m = document.createElement('small'); m.textContent = sub; b.appendChild(m); }
+      if (check) { const i = document.createElement('i'); i.setAttribute('aria-hidden', 'true'); b.appendChild(i); }
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+      return b;
+    };
+    const markOn = (list, btn) => $$('.choice', list).forEach((b) => { const on = b === btn; b.classList.toggle('is-on', on); b.setAttribute('aria-pressed', on); });
+    const goNextSoon = (from) => setTimeout(() => { if (cur === from) { const f = flow(); render(f[f.indexOf(from) + 1]); } }, 260);
+
+    /* step contents that depend on earlier answers */
+    const buildServices = () => {
+      const list = $('[data-list]', step('usluga'));
+      list.textContent = '';
+      const c = catObj();
+      $('[data-q]', step('usluga')).textContent = c.q || 'Koja usluga?';
+      [...c.services, { n: UNSURE }].forEach((s) => {
+        const sub = s.v ? `od ${fmt(Math.min(...s.v.map((v) => toNum(v.p))))} din` : meta(s, c.plus);
+        const b = choiceBtn(s.n, sub, st.svc === s.n);
+        b.addEventListener('click', () => {
+          if (st.svc !== s.n) { st.variant = null; st.addons = []; st.addonsSeen = false; }
+          st.svc = s.n; markOn(list, b); paintSummary(); goNextSoon('usluga');
+        });
+        list.appendChild(b);
+      });
+    };
+    const buildVariants = () => {
+      const s = svcObj(), list = $('[data-list]', step('varijanta'));
+      list.textContent = '';
+      $('[data-q]', step('varijanta')).textContent = s.vq || 'Izaberite';
+      const hint = $('[data-hint]', step('varijanta'));
+      hint.textContent = s.vh || ''; hint.hidden = !s.vh;
+      s.v.forEach((v) => {
+        const b = choiceBtn(v.n, meta(v), st.variant === v.n);
+        b.addEventListener('click', () => { st.variant = v.n; markOn(list, b); paintSummary(); goNextSoon('varijanta'); });
+        list.appendChild(b);
+      });
+    };
+    const buildAddons = () => {
+      const c = catObj(), list = $('[data-list]', step('dodaci'));
+      list.textContent = '';
+      $('[data-q]', step('dodaci')).textContent = c.aq || 'Želite li nešto uz to?';
+      $('[data-hint]', step('dodaci')).textContent = c.ah || 'Nije obavezno. Možete izabrati više stavki ili preskočiti.';
+      addonList().forEach((a) => {
+        const b = choiceBtn(a.n, meta(a, c.aplus !== false), st.addons.includes(a.n), true);
+        b.addEventListener('click', () => {
+          const on = !st.addons.includes(a.n);
+          // extras in the same group exclude each other (e.g. one nail art level)
+          if (a.g) st.addons = st.addons.filter((n) => { const o = c.addons.find((x) => x.n === n); return !o || o.g !== a.g; });
+          st.addons = st.addons.filter((n) => n !== a.n);
+          if (on) st.addons.push(a.n);
+          $$('.choice', list).forEach((x) => { const v = st.addons.includes($('span', x).textContent); x.classList.toggle('is-on', v); x.setAttribute('aria-pressed', v); });
+          next.firstChild.textContent = st.addons.length ? 'Dalje' : 'Preskoči';
+          paintSummary();
+        });
+        list.appendChild(b);
+      });
+    };
+
+    /* summary bar: answers so far + estimated price/time */
+    const answers = () => {
+      const out = [];
+      const c = catObj(), s = svcObj(), v = variantObj();
+      if (c) out.push(['kategorija', 'Kategorija', c.name]);
+      if (st.svc) out.push(['usluga', 'Usluga', st.svc]);
+      if (v) out.push(['varijanta', stepName('varijanta'), v.n]);
+      if (st.addonsSeen && flow().includes('dodaci')) out.push(['dodaci', stepName('dodaci'), st.addons.length ? st.addons.join(', ') : 'Bez dodataka']);
+      if (st.termin) out.push(['termin', 'Termin', st.termin]);
+      return out;
+    };
+    const estimate = () => {
+      const c = catObj(), s = svcObj();
+      if (!s) return '';
+      const base = variantObj() || (s.v ? null : s);
+      if (!base) return '';
+      let price = toNum(base.p), time = mins(base.t), perNail = base.per ? toNum(base.p) : 0;
+      if (base.per) price = 0;
+      st.addons.forEach((n) => {
+        const a = c.addons.find((x) => x.n === n); if (!a) return;
+        if (a.per) perNail += toNum(a.p); else { price += toNum(a.p); time += mins(a.t); }
+      });
+      const parts = [];
+      if (price) parts.push(`<b>${fmt(price)} din</b>`);
+      if (perNail) parts.push(`${price ? '+ ' : ''}<b>${fmt(perNail)} din</b> po noktu`);
+      if (c.plus) parts.push('doplata na osnovnu uslugu');
+      if (time) parts.push(`oko ${time} min`);
+      return parts.length ? 'Okvirno: ' + parts.join(' · ') : '';
+    };
+    const paintSummary = () => {
+      const list = answers().filter(([k]) => flow().indexOf(k) < flow().indexOf(cur) || cur === 'podaci');
+      chipsEl.textContent = '';
+      list.forEach(([k, lab, val]) => {
+        const b = document.createElement('button');
+        b.type = 'button'; b.className = 'wiz__chip'; b.title = 'Izmeni';
+        const sm = document.createElement('small'); sm.textContent = lab;
+        const sp = document.createElement('span'); sp.textContent = val;
+        b.append(sm, sp);
+        b.addEventListener('click', () => render(k));
+        chipsEl.appendChild(b);
+      });
+      totalEl.innerHTML = estimate();
+      sum.hidden = !list.length && !totalEl.innerHTML;
+    };
 
     const lockHeight = (fn) => {
       const from = vp.offsetHeight;
@@ -426,61 +581,47 @@ const WA_NUMBER = '';
       vp.addEventListener('transitionend', done);
       setTimeout(done, 1000);
     };
-    const isChoiceStep = (el) => !!$('.choices', el);
-    const canNext = () => {
-      const g = $('.choices', flow[idx]);
-      return !g || !!data[g.dataset.group];
-    };
-    const render = (i) => {
+    const render = (k) => {
+      if (k === 'usluga') buildServices();
+      if (k === 'varijanta') buildVariants();
+      if (k === 'dodaci') { buildAddons(); st.addonsSeen = true; }
       lockHeight(() => {
         steps.forEach((s) => { s.hidden = true; s.classList.remove('is-enter'); });
-        const el = i === 'done' ? steps.find((s) => s.dataset.step === 'done') : flow[i];
-        el.hidden = false; el.classList.add('is-enter');
+        const el = step(k); el.hidden = false; el.classList.add('is-enter');
       });
-      if (i === 'done') {
-        navRow.hidden = true; bar.style.width = '100%';
+      if (k === 'done') {
+        navRow.hidden = true; sum.hidden = true; bar.style.width = '100%';
         label.textContent = 'Poslato'; name.textContent = '';
         return;
       }
-      idx = i;
-      bar.style.width = ((i + 1) / total) * 100 + '%';
-      label.textContent = `Korak ${i + 1} od ${total}`;
-      name.textContent = flow[i].dataset.name || '';
+      cur = k;
+      const f = flow(), i = f.indexOf(k);
+      bar.style.width = ((i + 1) / f.length) * 100 + '%';
+      label.textContent = `Korak ${i + 1} od ${f.length}`;
+      name.textContent = stepName(k);
       back.hidden = i === 0;
-      next.hidden = isChoiceStep(flow[i]); // choice steps advance on tap, so no extra button there
-      next.disabled = !canNext();
-      next.firstChild.textContent = i === total - 1 ? 'Pošalji zahtev' : 'Dalje';
-      err.hidden = true;
-    };
-
-    const select = (btn, group) => {
-      $$('.choice', group).forEach((b) => b.classList.remove('is-on'));
-      btn.classList.add('is-on');
-      data[group.dataset.group] = btn.dataset.value;
-      // picking a category refills the "which service" step from the price list
-      if (btn.dataset.slug && dyn && group !== dyn) fillServices(btn.dataset.slug);
-    };
-    const bind = (btn, group) => btn.addEventListener('click', () => {
-      select(btn, group);
+      next.hidden = !(k === 'dodaci' || k === 'podaci');
       next.disabled = false;
-      // single choice auto-advances after a short beat so the selection is visible
-      setTimeout(() => { if (idx < total - 1 && flow[idx].contains(btn)) render(idx + 1); }, 260);
-    });
-    const fillServices = (slug) => {
-      const list = (priceData && priceData[slug]) || [];
-      delete data[dyn.dataset.group];
-      dyn.textContent = '';
-      list.forEach(([n, p]) => {
-        const b = document.createElement('button');
-        b.type = 'button'; b.className = 'choice'; b.dataset.value = n;
-        const s = document.createElement('span'); s.textContent = n; b.appendChild(s);
-        if (p) { const sm = document.createElement('small'); sm.textContent = p; b.appendChild(sm); }
-        dyn.appendChild(b); bind(b, dyn);
-      });
+      next.firstChild.textContent = k === 'podaci' ? 'Pošalji zahtev' : (st.addons.length ? 'Dalje' : 'Preskoči');
+      err.hidden = true;
+      paintSummary();
     };
-    $$('.choices', form).forEach((group) => { if (group !== dyn) $$('.choice', group).forEach((btn) => bind(btn, group)); });
 
-    back.addEventListener('click', () => { if (idx > 0) render(idx - 1); });
+    /* fixed steps: category and time */
+    $$('.choice', step('kategorija')).forEach((b) => b.addEventListener('click', () => pickCat(b.dataset.slug, true)));
+    const pickCat = (slug, auto) => {
+      const b = $$('.choice', step('kategorija')).find((x) => x.dataset.slug === slug);
+      if (!b) return false;
+      if (st.cat !== slug) { st.svc = null; st.variant = null; st.addons = []; st.addonsSeen = false; }
+      st.cat = slug; markOn(step('kategorija'), b);
+      if (auto) goNextSoon('kategorija'); else render('usluga');
+      return true;
+    };
+    $$('.choice', step('termin')).forEach((b) => b.addEventListener('click', () => {
+      st.termin = b.dataset.value; markOn(step('termin'), b); paintSummary(); goNextSoon('termin');
+    }));
+
+    back.addEventListener('click', () => { const f = flow(), i = f.indexOf(cur); if (i > 0) render(f[i - 1]); });
 
     const validate = () => {
       let ok = true;
@@ -499,25 +640,27 @@ const WA_NUMBER = '';
 
     next.addEventListener('click', async () => {
       if (busy) return;
-      if (idx < total - 1) { if (canNext()) render(idx + 1); return; }
+      if (cur !== 'podaci') { const f = flow(); render(f[f.indexOf(cur) + 1]); return; }
       if (!validate()) { err.textContent = 'Upišite ime i broj telefona da bismo mogli da vam se javimo.'; err.hidden = false; return; }
       if (!ENDPOINT && !WA_NUMBER) {
         err.innerHTML = 'Slanje preko sajta još nije uključeno. Pišite nam na <a href="https://ig.me/m/pashabeautystudioo" target="_blank" rel="noopener">Instagramu</a> i zakazujemo odmah.';
         err.hidden = false; return;
       }
       busy = true; next.disabled = true; err.hidden = true;
+      const v = variantObj();
+      const est = estimate().replace(/<[^>]+>/g, '');
       const payload = {
-        kategorija: data.kategorija || '', usluga: data.usluga || '', termin: data.termin || '',
+        kategorija: (catObj() || {}).name || '', usluga: st.svc ? st.svc + (v ? `, ${stepName('varijanta').toLowerCase()} ${v.n}` : '') : '',
+        dodaci: st.addons.join(', '), okvirno: est, termin: st.termin || '',
         ime: form.elements.ime.value.trim(), telefon: form.elements.telefon.value.trim(),
         email: form.elements.email.value.trim(), poruka: form.elements.poruka.value.trim(),
         stranica: location.pathname
       };
       // WhatsApp opens synchronously inside the click, otherwise the browser blocks the new tab
       if (WA_NUMBER) {
-        const txt = ['Zdravo, želim da zakažem termin.',
-          `Usluga: ${payload.kategorija}${payload.usluga ? ', ' + payload.usluga : ''}`,
-          `Kada: ${payload.termin}`, `Ime: ${payload.ime}`, `Telefon: ${payload.telefon}`,
-          payload.poruka ? `Poruka: ${payload.poruka}` : ''].filter(Boolean).join('\n');
+        const txt = ['Zdravo, želim da zakažem termin.', `Kategorija: ${payload.kategorija}`, `Usluga: ${payload.usluga}`,
+          payload.dodaci ? `Dodaci: ${payload.dodaci}` : '', est, `Kada: ${payload.termin}`,
+          `Ime: ${payload.ime}`, `Telefon: ${payload.telefon}`, payload.poruka ? `Poruka: ${payload.poruka}` : ''].filter(Boolean).join('\n');
         window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(txt)}`, '_blank', 'noopener');
         const dt = $('[data-done-text]', form);
         if (dt && !ENDPOINT) dt.textContent = 'Otvorili smo WhatsApp sa vašim zahtevom. Pošaljite poruku i javljamo vam se da potvrdimo termin.';
@@ -532,17 +675,10 @@ const WA_NUMBER = '';
       } finally { busy = false; }
     });
 
-    // "Zakaži uslugu" buttons (and ?usluga=slug on Rezervacije) preselect the category
-    const first = $('.choices', flow[0]);
-    const preselect = (slug) => {
-      const btn = $$('.choice', first).find((b) => b.dataset.slug === slug || b.dataset.value === slug);
-      if (!btn) return false;
-      select(btn, first); render(1); return true;
-    };
-    $$('[data-service]').forEach((a) => a.addEventListener('click', () => preselect(a.dataset.service)));
-
-    render(0);
+    // "Zakaži uslugu" buttons on the home page and ?usluga=slug on Rezervacije preselect the category
+    $$('[data-service]').forEach((a) => a.addEventListener('click', () => pickCat(a.dataset.service, false)));
+    render('kategorija');
     const q = new URLSearchParams(location.search).get('usluga');
-    if (q) preselect(q);
+    if (q) pickCat(q, false);
   });
 })();

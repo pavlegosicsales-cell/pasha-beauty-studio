@@ -89,37 +89,52 @@
           <div class="wiz__meta"><span data-step-label>Korak 1 od 4</span><span data-step-name>Kategorija</span></div>
           <div class="wiz__bar"><i data-bar></i></div>
         </div>
+        <div class="wiz__sum" data-summary hidden>
+          <div class="wiz__chips" data-chips></div>
+          <p class="wiz__total" data-total></p>
+        </div>
         <div class="wiz__viewport" data-viewport>
-          <div class="wiz__step" data-step="1" data-name="Kategorija">
+          <div class="wiz__step" data-step="kategorija" data-name="Kategorija">
             <p class="wiz__q">Šta želite da uradite?</p>
-            <div class="choices" data-group="kategorija">
-              <button type="button" class="choice" data-value="Manikir i gel lak" data-slug="manikir"><span class="ic" style="--i:url(icons/alati.svg)"></span>Manikir i gel lak</button>
-              <button type="button" class="choice" data-value="Izlivanje i korekcija" data-slug="izlivanje"><span class="ic" style="--i:url(icons/slojevi.svg)"></span>Izlivanje i korekcija</button>
-              <button type="button" class="choice" data-value="Nail art" data-slug="nail-art"><span class="ic" style="--i:url(icons/cetka.svg)"></span>Nail art</button>
-              <button type="button" class="choice" data-value="Pedikir" data-slug="pedikir"><span class="ic" style="--i:url(icons/kapi.svg)"></span>Pedikir</button>
-              <button type="button" class="choice" data-value="Trepavice i obrve" data-slug="trepavice"><span class="ic" style="--i:url(icons/iskre-2.svg)"></span>Trepavice i obrve</button>
-              <button type="button" class="choice" data-value="Masaže" data-slug="masaze"><span class="ic" style="--i:url(icons/vetar.svg)"></span>Masaže</button>
+            <div class="choices">
+              <button type="button" class="choice" data-slug="manikir"><span class="ic" style="--i:url(icons/alati.svg)"></span><span>Manikir i gel lak</span></button>
+              <button type="button" class="choice" data-slug="izlivanje"><span class="ic" style="--i:url(icons/slojevi.svg)"></span><span>Izlivanje i korekcija</span></button>
+              <button type="button" class="choice" data-slug="nail-art"><span class="ic" style="--i:url(icons/cetka.svg)"></span><span>Nail art</span></button>
+              <button type="button" class="choice" data-slug="pedikir"><span class="ic" style="--i:url(icons/kapi.svg)"></span><span>Pedikir</span></button>
+              <button type="button" class="choice" data-slug="trepavice"><span class="ic" style="--i:url(icons/iskre-2.svg)"></span><span>Trepavice i obrve</span></button>
+              <button type="button" class="choice" data-slug="masaze"><span class="ic" style="--i:url(icons/vetar.svg)"></span><span>Masaže</span></button>
             </div>
           </div>
-          <div class="wiz__step" data-step="2" data-name="Usluga" hidden>
-            <p class="wiz__q">Koja usluga?</p>
-            <div class="choices choices--svc" data-group="usluga" data-dynamic></div>
+          <div class="wiz__step" data-step="usluga" data-name="Usluga" hidden>
+            <p class="wiz__q" data-q></p>
+            
+            <div class="choices choices--svc" data-list></div>
           </div>
-          <div class="wiz__step" data-step="3" data-name="Termin" hidden>
+          <div class="wiz__step" data-step="varijanta" data-name="Izbor" hidden>
+            <p class="wiz__q" data-q></p>
+            <p class="wiz__hint" data-hint></p>
+            <div class="choices choices--svc" data-list></div>
+          </div>
+          <div class="wiz__step" data-step="dodaci" data-name="Dodaci" hidden>
+            <p class="wiz__q" data-q></p>
+            <p class="wiz__hint" data-hint></p>
+            <div class="choices choices--svc" data-list></div>
+          </div>
+          <div class="wiz__step" data-step="termin" data-name="Termin" hidden>
             <p class="wiz__q">Kada vam odgovara?</p>
-            <div class="choices" data-group="termin">
-              <button type="button" class="choice" data-value="Ove nedelje"><span class="ic" style="--i:url(icons/iskre.svg)"></span>Ove nedelje</button>
-              <button type="button" class="choice" data-value="Sledeće nedelje"><span class="ic" style="--i:url(icons/iskre-2.svg)"></span>Sledeće nedelje</button>
-              <button type="button" class="choice" data-value="Ovog meseca"><span class="ic" style="--i:url(icons/slojevi.svg)"></span>Ovog meseca</button>
-              <button type="button" class="choice" data-value="Samo se raspitujem"><span class="ic" style="--i:url(icons/telefon-24.svg)"></span>Samo se raspitujem</button>
+            <div class="choices">
+              <button type="button" class="choice" data-value="Ove nedelje"><span class="ic" style="--i:url(icons/iskre.svg)"></span><span>Ove nedelje</span></button>
+              <button type="button" class="choice" data-value="Sledeće nedelje"><span class="ic" style="--i:url(icons/iskre-2.svg)"></span><span>Sledeće nedelje</span></button>
+              <button type="button" class="choice" data-value="Ovog meseca"><span class="ic" style="--i:url(icons/slojevi.svg)"></span><span>Ovog meseca</span></button>
+              <button type="button" class="choice" data-value="Samo se raspitujem"><span class="ic" style="--i:url(icons/telefon-24.svg)"></span><span>Samo se raspitujem</span></button>
             </div>
           </div>
-          <div class="wiz__step" data-step="4" data-name="Vaši podaci" hidden>
+          <div class="wiz__step" data-step="podaci" data-name="Vaši podaci" hidden>
             <div class="fields">
               <div class="field"><label for="f-ime">Ime i prezime *</label><input id="f-ime" name="ime" autocomplete="name" placeholder="Ana Petrović" required></div>
               <div class="field"><label for="f-tel">Telefon *</label><input id="f-tel" name="telefon" type="tel" autocomplete="tel" inputmode="tel" placeholder="06x xxx xxxx" required></div>
               <div class="field field--full"><label for="f-mail">Email <em>(nije obavezno)</em></label><input id="f-mail" name="email" type="email" autocomplete="email" placeholder="ana@primer.rs"></div>
-              <div class="field field--full"><label for="f-poruka">Poruka <em>(nije obavezno)</em></label><textarea id="f-poruka" name="poruka" placeholder="Ideja za dizajn, dužina, oblik, kod koje devojke želite termin..."></textarea></div>
+              <div class="field field--full"><label for="f-poruka">Poruka <em>(nije obavezno)</em></label><textarea id="f-poruka" name="poruka" placeholder="Ideja za dizajn, oblik, kod koje devojke želite termin..."></textarea></div>
             </div>
           </div>
           <div class="wiz__step wiz__done" data-step="done" hidden>
@@ -131,15 +146,15 @@
         <p class="wiz__err" data-error hidden></p>
         <div class="wiz__nav" data-nav>
           <button type="button" class="wiz__back" data-back hidden><i></i>Nazad</button>
-          <button type="button" class="btn btn--gold" data-next disabled>Dalje<span class="btn__arr"><i></i><i></i></span></button>
+          <button type="button" class="btn btn--gold" data-next hidden>Dalje<span class="btn__arr"><i></i><i></i></span></button>
         </div>
         <p class="wiz__note">Slanjem prihvatate <a href="privatnost.html">politiku privatnosti</a>.</p>
+        <script type="application/json" data-cenovnik>{"cats": [{"slug": "manikir", "services": [{"n": "Manikir", "p": "1.500", "t": "30 min"}, {"n": "Manikir + gel lak", "p": "2.800", "t": "60 min"}, {"n": "Manikir + gel lak + french", "p": "3.300", "t": "75 min"}, {"n": "Manikir + ojačavanje noktiju rubber bazom", "p": "2.800", "t": "75 min"}, {"n": "Gel lak na rukama", "p": "2.500", "t": "45 min"}, {"n": "Ojačavanje prirodnih noktiju gelom", "p": "2.800", "t": "75 min"}, {"n": "Ojačavanje noktiju gelom + gel u boji", "p": "3.100", "t": "90 min"}, {"n": "Ojačavanje prirodnih noktiju gelom + francuski manikir", "p": "3.300", "t": "105 min"}, {"n": "Skidanje gela ili gel laka", "p": "1.500", "t": "30 min"}, {"n": "Gel lak na jednom noktu", "p": "300", "t": "10 min"}], "addons": [{"n": "French, doplata za 10 noktiju", "p": "800", "t": "15 min", "g": "fr", "skip": ["french", "francuski"]}, {"n": "French, doplata za jedan nokat", "p": "120", "t": "5 min", "g": "fr", "skip": ["french", "francuski"]}, {"n": "Simple nail art", "p": "2.500", "t": "30 min", "g": "art"}, {"n": "Medium nail art", "p": "6.000", "t": "60 min", "g": "art"}, {"n": "Hard nail art", "p": "12.000", "t": "120 min", "g": "art"}, {"n": "Nail art po noktu", "p": "120", "t": "", "per": true, "g": "art"}], "at": "Dodaci", "aq": "Želite li french ili nail art uz to?", "name": "Manikir i gel lak"}, {"slug": "izlivanje", "services": [{"n": "Izlivanje noktiju", "p": "", "t": "", "vt": "Dužina", "vq": "Koja dužina noktiju?", "vh": "S je najkraća dužina, XXXL najduža. Ako niste sigurni, izaberite približno, a mi ćemo potvrditi.", "v": [{"n": "S", "p": "3.900", "t": "105 min"}, {"n": "M", "p": "4.200", "t": "120 min"}, {"n": "L", "p": "4.600", "t": "135 min"}, {"n": "XL", "p": "5.400", "t": "150 min"}, {"n": "XXL", "p": "6.100", "t": "165 min"}, {"n": "XXXL", "p": "7.100", "t": "180 min"}]}, {"n": "Korekcija noktiju", "p": "", "t": "", "vt": "Dužina", "vq": "Koja dužina noktiju?", "vh": "S je najkraća dužina, XXXL najduža. Ako niste sigurni, izaberite približno, a mi ćemo potvrditi.", "v": [{"n": "S", "p": "3.400", "t": "75 min"}, {"n": "M", "p": "3.700", "t": "90 min"}, {"n": "L", "p": "4.000", "t": "105 min"}, {"n": "XL", "p": "4.800", "t": "120 min"}, {"n": "XXL", "p": "5.500", "t": "135 min"}, {"n": "XXXL", "p": "6.500", "t": "150 min"}]}, {"n": "Izlivanje jednog nokta", "p": "", "t": "", "vt": "Dužina", "vq": "Koja dužina nokta?", "vh": "S je najkraća dužina, XXXL najduža. Ako niste sigurni, izaberite približno, a mi ćemo potvrditi.", "v": [{"n": "S / M / L", "p": "900", "t": "15 min"}, {"n": "XL / XXL", "p": "1.100", "t": "20 min"}, {"n": "XXXL", "p": "1.300", "t": "25 min"}]}], "addons": [{"n": "French, doplata za 10 noktiju", "p": "800", "t": "15 min", "g": "fr", "skip": ["french", "francuski"]}, {"n": "French, doplata za jedan nokat", "p": "120", "t": "5 min", "g": "fr", "skip": ["french", "francuski"]}, {"n": "Simple nail art", "p": "2.500", "t": "30 min", "g": "art"}, {"n": "Medium nail art", "p": "6.000", "t": "60 min", "g": "art"}, {"n": "Hard nail art", "p": "12.000", "t": "120 min", "g": "art"}, {"n": "Nail art po noktu", "p": "120", "t": "", "per": true, "g": "art"}], "at": "Dodaci", "aq": "Želite li french ili nail art uz to?", "name": "Izlivanje i korekcija"}, {"slug": "nail-art", "plus": true, "q": "Koji nivo nail arta?", "services": [{"n": "Simple nail art", "p": "2.500", "t": "30 min"}, {"n": "Medium nail art", "p": "6.000", "t": "60 min"}, {"n": "Hard nail art", "p": "12.000", "t": "120 min"}, {"n": "Nail art po noktu", "p": "120", "t": "30 min do 2 h", "per": true}], "addons": [{"n": "Na manikir ili gel lak", "p": "", "t": "", "g": "base"}, {"n": "Na ojačavanje gelom", "p": "", "t": "", "g": "base"}, {"n": "Na izlivanje", "p": "", "t": "", "g": "base"}, {"n": "Na korekciju", "p": "", "t": "", "g": "base"}, {"n": "Imam svoje nokte, samo nail art", "p": "", "t": "", "g": "base"}], "at": "Osnova", "aq": "Na koju osnovnu uslugu ide nail art?", "aplus": false, "ah": "Nail art se doplaćuje na osnovnu uslugu. Izaberite jednu ili preskočite, pa ćemo se dogovoriti.", "name": "Nail art"}, {"slug": "pedikir", "services": [{"n": "Estetski pedikir", "p": "3.100", "t": "60 min"}, {"n": "Estetski pedikir + gel lak", "p": "4.000", "t": "90 min"}, {"n": "Gel lak na nogama", "p": "2.600", "t": "45 min"}], "name": "Pedikir"}, {"slug": "trepavice", "services": [{"n": "Lash lift", "p": "3.500", "t": "60 min"}, {"n": "Brow lift", "p": "3.000", "t": "60 min"}, {"n": "Farbanje obrva", "p": "700", "t": "20 min"}, {"n": "Farbanje trepavica", "p": "800", "t": "20 min"}, {"n": "Nadogradnja trepavica", "p": "", "t": "", "vt": "Tehnika", "vq": "Koja tehnika nadogradnje?", "v": [{"n": "1:1", "p": "3.500", "t": "90 min"}, {"n": "2D (Y)", "p": "4.000", "t": "90 min"}, {"n": "3D", "p": "4.500", "t": "105 min"}, {"n": "4D", "p": "5.000", "t": "120 min"}, {"n": "5D", "p": "5.500", "t": "120 min"}, {"n": "Mix", "p": "5.500", "t": "120 min"}, {"n": "Mega volumen", "p": "6.500", "t": "150 min"}, {"n": "Ruski volumen", "p": "6.000", "t": "120 min"}]}, {"n": "Korekcija trepavica", "p": "", "t": "", "vt": "Tehnika", "vq": "Koja tehnika korekcije?", "v": [{"n": "1:1", "p": "3.000", "t": "60 min"}, {"n": "2D (Y)", "p": "3.500", "t": "60 min"}, {"n": "3D", "p": "4.000", "t": "75 min"}, {"n": "4D", "p": "4.500", "t": "75 min"}, {"n": "5D", "p": "5.000", "t": "90 min"}, {"n": "Mix", "p": "5.000", "t": "75 min"}, {"n": "Mega volumen", "p": "6.000", "t": "90 min"}, {"n": "Ruski volumen", "p": "5.500", "t": "75 min"}]}, {"n": "Skidanje trepavica", "p": "1.500", "t": "30 min"}], "addons": [{"n": "Oblikovanje obrva voskom ili pincetom pre brow lifta", "p": "1.000", "t": "15 min", "for": ["Brow lift"]}, {"n": "Farbanje obrva", "p": "700", "t": "20 min", "for": ["Brow lift"]}, {"n": "Farbanje trepavica", "p": "800", "t": "20 min", "for": ["Lash lift"]}], "at": "Dodaci", "aq": "Želite li nešto uz to?", "name": "Trepavice i obrve"}, {"slug": "masaze", "services": [{"n": "Relaks masaža nogu", "p": "2.700", "t": "30 min"}, {"n": "Relaks masaža leđa", "p": "2.700", "t": "30 min"}, {"n": "Relaks masaža celog tela", "p": "4.200", "t": "60 min"}, {"n": "Terapeutska masaža", "p": "2.300", "t": "30 min"}, {"n": "Terapeutska masaža celog tela", "p": "4.600", "t": "60 min"}, {"n": "Ručna anticelulit masaža", "p": "2.800", "t": "30 min"}, {"n": "Ručna anticelulit masaža celog tela", "p": "4.000", "t": "60 min"}], "name": "Masaže"}]}</script>
       </form>
       <div class="book__img"><img src="images/ig-takmicenje-model.jpg" alt="Model sa takmičarskim setom noktiju i haljinom sa oslikanim insektima" loading="lazy"></div>
     </div>
   </div>
 </section>
-<script type="application/json" id="cenovnik">{"manikir": [["Manikir", "1.500 din"], ["Manikir + gel lak", "2.800 din"], ["Manikir + gel lak + french", "3.300 din"], ["Manikir + ojačavanje noktiju rubber bazom", "2.800 din"], ["Gel lak na rukama", "2.500 din"], ["Ojačavanje prirodnih noktiju gelom", "2.800 din"], ["Ojačavanje noktiju gelom + gel u boji", "3.100 din"], ["Ojačavanje prirodnih noktiju gelom + francuski manikir", "3.300 din"], ["Skidanje gela ili gel laka", "1.500 din"], ["Gel lak na jednom noktu", "300 din"], ["Nisam sigurna, posavetujte me", ""]], "izlivanje": [["Izlivanje noktiju", "od 3.900 din"], ["Korekcija noktiju", "od 3.400 din"], ["Izlivanje jednog nokta", "od 900 din"], ["Nisam sigurna, posavetujte me", ""]], "nail-art": [["Simple nail art", "+2.500 din"], ["Medium nail art", "+6.000 din"], ["Hard nail art", "+12.000 din"], ["Nail art po noktu", "120 din"], ["Nisam sigurna, posavetujte me", ""]], "pedikir": [["Estetski pedikir", "3.100 din"], ["Estetski pedikir + gel lak", "4.000 din"], ["Gel lak na nogama", "2.600 din"], ["Nisam sigurna, posavetujte me", ""]], "trepavice": [["Lash lift", "3.500 din"], ["Brow lift", "3.000 din"], ["Farbanje obrva", "700 din"], ["Farbanje trepavica", "800 din"], ["Nadogradnja trepavica", "od 3.500 din"], ["Korekcija trepavica", "od 3.000 din"], ["Skidanje trepavica", "1.500 din"], ["Nisam sigurna, posavetujte me", ""]], "masaze": [["Relaks masaža nogu", "2.700 din"], ["Relaks masaža leđa", "2.700 din"], ["Relaks masaža celog tela", "4.200 din"], ["Terapeutska masaža", "2.300 din"], ["Terapeutska masaža celog tela", "4.600 din"], ["Ručna anticelulit masaža", "2.800 din"], ["Ručna anticelulit masaža celog tela", "4.000 din"], ["Nisam sigurna, posavetujte me", ""]]}</script>
 
 <!-- ============ HOW IT WORKS ============ -->
 <section class="sec" id="kako">
