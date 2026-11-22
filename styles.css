@@ -968,6 +968,9 @@ a.cinfo__item { transition: background-color 0.3s ease; }
 .post-tip p { font-size: 16px; }
 .post-cta { margin-top: 18px; display: flex; gap: 14px; flex-wrap: wrap; }
 
+.ilink--txt { cursor: default; }
+.crow b { font-weight: 500; color: var(--ink); text-align: right; }
+
 /* ================= TABLET 810-1199 ================= */
 @media (max-width: 1199.98px) {
   :root { --pad-x: 22px; --h1: 72px; --h-card: 24px; --statement: 26px; }

@@ -4,7 +4,7 @@
 const ENDPOINT = '';
 // Studio WhatsApp number, international format without + or spaces (e.g. '381641234567').
 // When set: "Pošalji poruku" buttons open WhatsApp and the booking form hands the request to WhatsApp.
-const WA_NUMBER = '';
+const WA_NUMBER = '381629780605';
 
 (() => {
   const $ = (s, r = document) => r.querySelector(s);
@@ -683,10 +683,11 @@ const WA_NUMBER = '';
           `Ime: ${payload.ime}`, `Telefon: ${payload.telefon}`, payload.poruka ? `Poruka: ${payload.poruka}` : ''].filter(Boolean).join('\n');
         window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(txt)}`, '_blank', 'noopener');
         const dt = $('[data-done-text]', form);
-        if (dt && !ENDPOINT) dt.textContent = 'Otvorili smo WhatsApp sa vašim zahtevom. Pošaljite poruku i javljamo vam se da potvrdimo termin.';
+        if (dt) dt.textContent = 'Otvorili smo WhatsApp sa vašim zahtevom. Pošaljite poruku i javljamo vam se da potvrdimo termin.';
       }
       try {
-        if (ENDPOINT) await fetch(ENDPOINT, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(payload) });
+        // GET with URL params: Apps Script 302-redirects POSTs and drops the body (see apps-script/README.md)
+        if (ENDPOINT) await fetch(`${ENDPOINT}?${new URLSearchParams(payload).toString()}`, { method: 'GET', mode: 'no-cors', keepalive: true });
         render('done');
       } catch (e) {
         err.innerHTML = 'Slanje trenutno nije moguće. Pišite nam na <a href="https://ig.me/m/pashabeautystudioo" target="_blank" rel="noopener">Instagramu</a> i zakazujemo odmah.';
