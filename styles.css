@@ -55,7 +55,7 @@ body {
   -webkit-font-smoothing: antialiased;
   overflow-x: clip;
 }
-img { display: block; max-width: 100%; }
+img { display: block; max-width: 100%; height: auto; }
 a { color: inherit; text-decoration: none; }
 button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
 h1, h2, h3, h4, h5, h6, p { margin: 0; }
@@ -698,7 +698,7 @@ ul { margin: 0; padding: 0; list-style: none; }
 .foot__about .btn { margin-top: 8px; }
 .foot__cols { width: 660px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
 .foot__col { display: flex; flex-direction: column; gap: 20px; }
-.foot__col h4 { font-size: 20px; line-height: 1.35; font-weight: 700; letter-spacing: 0; text-transform: uppercase; }
+.foot__col h4, .foot__h { font-size: 20px; line-height: 1.35; font-weight: 700; letter-spacing: 0; text-transform: uppercase; }
 .foot__col ul { display: flex; flex-direction: column; gap: 10px; }
 .flink { display: inline-flex; color: rgba(255, 255, 255, 0.6); }
 .flink .roll > span + span { color: var(--white); }
