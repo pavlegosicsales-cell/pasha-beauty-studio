@@ -1,7 +1,7 @@
 /* Pasha Beauty Studio: interactions (behaviour mirrors the Salonix Framer template) */
 
 // Paste the Apps Script URL here after running Skill 03 (form backend setup).
-const ENDPOINT = '';
+const ENDPOINT = 'https://script.google.com/macros/s/AKfycbzSJtjpjOP6vn8foVFXsQBbdBkJKD4DWFu3cekQdH-gJLxG9bB5dV0RQsiFX2Ht4qWqxQ/exec';
 // Studio WhatsApp number, international format without + or spaces (e.g. '381641234567').
 // When set: "Pošalji poruku" buttons open WhatsApp and the booking form hands the request to WhatsApp.
 const WA_NUMBER = '381629780605';
