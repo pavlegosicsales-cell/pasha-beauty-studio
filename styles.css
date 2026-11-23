@@ -847,7 +847,7 @@ a.cinfo__item { transition: background-color 0.3s ease; }
 .gal__item:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
 .lb {
   position: fixed; inset: 0; z-index: 120; display: grid; place-items: center; padding: 70px 90px;
-  background: rgba(13, 10, 9, 0.94); opacity: 0; transition: opacity 0.35s ease;
+  background: rgba(13, 10, 9, 0.98); opacity: 0; transition: opacity 0.35s ease;
 }
 .lb[hidden] { display: none; }
 .lb.is-on { opacity: 1; }
@@ -970,6 +970,18 @@ a.cinfo__item { transition: background-color 0.3s ease; }
 
 .ilink--txt { cursor: default; }
 .crow b { font-weight: 500; color: var(--ink); text-align: right; }
+
+/* gallery on touch screens: no hover blur layers (73 backdrop-filters made scrolling stutter) */
+@media (hover: none), (pointer: coarse) {
+  .gal__item .gimg__over { display: none; }
+  .gal__item > img { transition: none; }
+  .gal__item { cursor: pointer; -webkit-tap-highlight-color: transparent; }
+}
+.lb { overscroll-behavior: contain; touch-action: none; -webkit-tap-highlight-color: transparent; }
+.lb { pointer-events: none; }
+.lb.is-on { pointer-events: auto; } /* a fading-out lightbox must not swallow the next tap */
+.lb__fig img { max-height: calc(100dvh - 190px); -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+.lb__fig.is-swap { transition: opacity 0.16s ease; }
 
 /* ================= TABLET 810-1199 ================= */
 @media (max-width: 1199.98px) {
@@ -1166,7 +1178,7 @@ a.cinfo__item { transition: background-color 0.3s ease; }
   .gal-filters { gap: 8px; }
   .gal-filter { padding: 7px 12px; }
   .lb { padding: 64px 14px 90px; }
-  .lb__fig img { max-height: calc(100vh - 210px); }
+  .lb__fig img { max-height: calc(100vh - 210px); max-height: calc(100dvh - 210px); }
   .lb__prev, .lb__next { top: auto; bottom: 22px; margin: 0; }
   .lb__prev { left: calc(50% - 56px); }
   .lb__next { right: calc(50% - 56px); }

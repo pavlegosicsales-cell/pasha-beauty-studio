@@ -372,7 +372,10 @@ const WA_NUMBER = '381629780605';
     $$('[data-wa-label]').forEach((el) => { el.textContent = 'Pošalji poruku'; });
   }
 
-  /* ---------- gallery: filters + lightbox ---------- */
+  /* ---------- gallery: filters + lightbox (phone-safe) ----------
+     Grid shows 600px thumbs; the lightbox loads the full photo (data-full) and preloads neighbours.
+     Scroll lock = body position:fixed (iOS ignores overflow:hidden on html and jumps). A swipe never
+     counts as a backdrop tap, and a quick reopen cancels the pending hide. */
   const gal = $('[data-gallery]');
   if (gal) {
     const items = $$('.gal__item', gal);
@@ -384,56 +387,91 @@ const WA_NUMBER = '381629780605';
       const apply = () => items.forEach((it) => { it.hidden = k !== 'sve' && it.dataset.cat !== k; });
       if (reduced) return apply();
       gal.classList.add('is-switching');
-      setTimeout(() => { apply(); requestAnimationFrame(() => gal.classList.remove('is-switching')); }, 250);
+      setTimeout(() => { apply(); requestAnimationFrame(() => gal.classList.remove('is-switching')); }, 220);
     }));
 
     const lb = $('#lightbox');
     const lbImg = $('[data-lb-img]', lb), lbCap = $('[data-lb-cap]', lb), lbCount = $('[data-lb-count]', lb), fig = $('.lb__fig', lb);
-    let list = [], at = 0, opener = null;
-    const paint = () => {
-      const img = $('img', list[at]);
-      lbImg.src = img.currentSrc || img.src; lbImg.alt = img.alt;
+    let list = [], at = 0, opener = null, hideT = 0, lockY = 0, isOpen = false, token = 0;
+    const cache = new Map();
+    const fullSrc = (it) => it.dataset.full || $('img', it).getAttribute('src');
+    const load = (src) => {
+      if (!cache.has(src)) {
+        cache.set(src, new Promise((res) => {
+          const im = new Image();
+          im.onload = im.onerror = () => (im.decode ? im.decode().catch(() => {}) : Promise.resolve()).then(() => res(src));
+          im.src = src;
+        }));
+      }
+      return cache.get(src);
+    };
+    const preloadAround = () => [1, -1].forEach((d) => { const it = list[(at + d + list.length) % list.length]; if (it) load(fullSrc(it)); });
+    const paint = (src) => {
+      const it = list[at], thumb = $('img', it);
+      lbImg.src = src; lbImg.alt = thumb.alt;
       lbCap.textContent = '';
-      const t = list[at].dataset.title;
+      const t = it.dataset.title;
       if (t) { const b = document.createElement('b'); b.textContent = t; lbCap.append(b, document.createElement('br')); }
-      lbCap.append(img.alt);
+      lbCap.append(thumb.alt);
       lbCount.textContent = `${at + 1} / ${list.length}`;
     };
-    const go = (d) => {
-      at = (at + d + list.length) % list.length;
-      if (reduced) return paint();
-      fig.classList.add('is-swap');
-      setTimeout(() => { paint(); fig.classList.remove('is-swap'); }, 200);
+    const show = (fade) => {
+      const my = ++token, src = fullSrc(list[at]);
+      if (fade && !reduced) fig.classList.add('is-swap');
+      Promise.all([load(src), new Promise((r) => setTimeout(r, fade && !reduced ? 160 : 0))]).then(() => {
+        if (my !== token) return; // a newer photo was requested meanwhile
+        paint(src); fig.classList.remove('is-swap'); preloadAround();
+      });
+    };
+    const go = (d) => { if (!isOpen || list.length < 2) return; at = (at + d + list.length) % list.length; show(true); };
+    const lock = () => {
+      lockY = scrollY;
+      if (lenis) lenis.stop();
+      Object.assign(document.body.style, { position: 'fixed', top: `-${lockY}px`, left: '0', right: '0', width: '100%' });
+    };
+    const unlock = () => {
+      Object.assign(document.body.style, { position: '', top: '', left: '', right: '', width: '' });
+      window.scrollTo(0, lockY);
+      if (lenis) { lenis.scrollTo(lockY, { immediate: true, force: true }); lenis.start(); }
     };
     const open = (it) => {
+      clearTimeout(hideT);
       opener = it; list = items.filter((x) => !x.hidden); at = list.indexOf(it);
-      paint(); lb.hidden = false;
+      // show the thumb at once (already loaded), then swap to the full photo
+      paint($('img', it).getAttribute('src')); show(false);
+      if (!isOpen) lock();
+      isOpen = true; lb.hidden = false;
       requestAnimationFrame(() => lb.classList.add('is-on'));
-      if (lenis) lenis.stop();
-      document.documentElement.style.overflow = 'hidden';
       $('[data-lb-close]', lb).focus({ preventScroll: true });
     };
     const close = () => {
+      if (!isOpen) return;
+      isOpen = false; token++;
       lb.classList.remove('is-on');
-      setTimeout(() => { lb.hidden = true; }, 350);
-      if (lenis) lenis.start();
-      document.documentElement.style.overflow = '';
+      unlock();
+      hideT = setTimeout(() => { lb.hidden = true; }, 320);
       if (opener) opener.focus({ preventScroll: true });
     };
     items.forEach((it) => it.addEventListener('click', () => open(it)));
-    $('[data-lb-close]', lb).addEventListener('click', close);
-    $('[data-lb-prev]', lb).addEventListener('click', () => go(-1));
-    $('[data-lb-next]', lb).addEventListener('click', () => go(1));
-    lb.addEventListener('click', (e) => { if (e.target === lb) close(); });
+    $('[data-lb-close]', lb).addEventListener('click', (e) => { e.stopPropagation(); close(); });
+    $('[data-lb-prev]', lb).addEventListener('click', (e) => { e.stopPropagation(); go(-1); });
+    $('[data-lb-next]', lb).addEventListener('click', (e) => { e.stopPropagation(); go(1); });
+    let swiped = 0;
+    lb.addEventListener('click', (e) => { if (Date.now() - swiped < 400) return; if (e.target === lb || e.target === fig) close(); });
     addEventListener('keydown', (e) => {
-      if (lb.hidden) return;
+      if (!isOpen) return;
       if (e.key === 'Escape') close();
       if (e.key === 'ArrowLeft') go(-1);
       if (e.key === 'ArrowRight') go(1);
     });
-    let sx = 0;
-    lb.addEventListener('touchstart', (e) => { sx = e.touches[0].clientX; }, { passive: true });
-    lb.addEventListener('touchend', (e) => { const dx = e.changedTouches[0].clientX - sx; if (Math.abs(dx) > 50) go(dx < 0 ? 1 : -1); });
+    let sx = 0, sy = 0;
+    lb.addEventListener('touchstart', (e) => { sx = e.touches[0].clientX; sy = e.touches[0].clientY; }, { passive: true });
+    lb.addEventListener('touchmove', (e) => { e.preventDefault(); }, { passive: false }); // no page bounce behind
+    lb.addEventListener('touchend', (e) => {
+      const dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy;
+      if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy) * 1.2) { swiped = Date.now(); go(dx < 0 ? 1 : -1); }
+      else if (dy > 90 && Math.abs(dy) > Math.abs(dx) * 1.5) { swiped = Date.now(); close(); } // swipe down closes
+    }, { passive: true });
   }
 
   /* ---------- booking wizard: every item of the price list can be booked ----------
