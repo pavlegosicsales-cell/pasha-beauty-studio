@@ -983,6 +983,27 @@ a.cinfo__item { transition: background-color 0.3s ease; }
 .lb__fig img { max-height: calc(100dvh - 190px); -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
 .lb__fig.is-swap { transition: opacity 0.16s ease; }
 
+/* WhatsApp CTAs */
+.btn--wa .wa-ic, .svc__more .wa-ic { width: 18px; height: 18px; flex: none; }
+.svc__more--wa { gap: 8px; }
+.svc__more--wa .wa-ic { width: 16px; height: 16px; color: var(--gold-ink); }
+.wa-float {
+  position: fixed; right: 20px; bottom: 20px; z-index: 45;
+  display: inline-flex; align-items: center; gap: 10px; height: 52px; padding: 0 18px 0 16px;
+  background: var(--gold); color: var(--ink); font-size: 15px; font-weight: 700; letter-spacing: -0.01em;
+  box-shadow: 0 8px 24px rgba(27, 21, 18, 0.18);
+  transition: transform 0.4s var(--sp-btn), opacity 0.3s ease, background-color 0.3s ease;
+}
+.wa-float svg { width: 22px; height: 22px; }
+@media (hover: hover) { .wa-float:hover { background: var(--gold-hover); } }
+.wa-float.is-away, .nav.is-open ~ * .wa-float { opacity: 0; transform: translateY(12px); pointer-events: none; }
+.js .wa-float { opacity: 0; transform: translateY(12px); }
+.is-ready .wa-float:not(.is-away) { opacity: 1; transform: none; transition-delay: 0.9s; }
+@media (max-width: 809.98px) {
+  .wa-float { right: 14px; bottom: 14px; width: 52px; padding: 0; justify-content: center; }
+  .wa-float span { display: none; }
+}
+
 /* ================= TABLET 810-1199 ================= */
 @media (max-width: 1199.98px) {
   :root { --pad-x: 22px; --h1: 72px; --h-card: 24px; --statement: 26px; }

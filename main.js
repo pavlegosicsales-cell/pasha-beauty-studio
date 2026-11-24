@@ -367,7 +367,16 @@ const WA_NUMBER = '381629780605';
 
   /* ---------- message buttons: WhatsApp once the number is known, Instagram DM until then ---------- */
   if (WA_NUMBER) {
-    $$('[data-contact]').forEach((a) => { a.href = `https://wa.me/${WA_NUMBER}`; });
+    $$('[data-contact]').forEach((a) => {
+      const t = a.dataset.waText;
+      a.href = `https://wa.me/${WA_NUMBER}` + (t ? `?text=${encodeURIComponent(t)}` : '');
+      a.target = '_blank'; a.rel = 'noopener';
+    });
+    // floating button steps aside while the menu or a photo is open, and near the footer
+    const waf = $('.wa-float');
+    if (waf && 'IntersectionObserver' in window) {
+      new IntersectionObserver(([e]) => waf.classList.toggle('is-away', e.isIntersecting), { threshold: 0.05 }).observe($('.foot'));
+    }
     $$('[data-wa-only]').forEach((el) => { el.hidden = false; });
     $$('[data-wa-label]').forEach((el) => { el.textContent = 'Pošalji poruku'; });
   }
