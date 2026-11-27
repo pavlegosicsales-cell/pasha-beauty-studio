@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /apps-script/
 
-Sitemap: https://pasha-beauty-studio.vercel.app/sitemap.xml
+Sitemap: https://pashabeautystudio.rs/sitemap.xml

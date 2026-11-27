@@ -1,0 +1,6 @@
+{
+  "redirects": [
+    { "source": "/(.*)", "has": [{ "type": "host", "value": "www.pashabeautystudio.rs" }], "destination": "https://pashabeautystudio.rs/$1", "permanent": true },
+    { "source": "/(.*)", "has": [{ "type": "host", "value": "pasha-beauty-studio.vercel.app" }], "destination": "https://pashabeautystudio.rs/$1", "permanent": true }
+  ]
+}
