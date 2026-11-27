@@ -21,7 +21,9 @@
   <meta name="twitter:image" content="https://pashabeautystudio.rs/images/og-image.jpg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Rethink+Sans:wght@500;700;800&display=swap" rel="stylesheet">
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Rethink+Sans:wght@500;700;800&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Rethink+Sans:wght@500;700;800&display=swap" rel="stylesheet"></noscript>
+  <link rel="preload" as="image" imagesrcset="images/md/wa-naslovna-dzep.jpg 900w, images/wa-naslovna-dzep.jpg 1177w" imagesizes="100vw" fetchpriority="high">
   <link rel="stylesheet" href="styles.css">
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"NailSalon","name":"Pasha Beauty Studio","url":"https://pashabeautystudio.rs/","image":"https://pashabeautystudio.rs/images/og-image.jpg","telephone":"+381629780605","email":"pashabeautystudioo@gmail.com","address":{"@type":"PostalAddress","streetAddress":"Vojvode Stepe 232","addressLocality":"Beograd","addressRegion":"Voždovac","addressCountry":"RS"},"openingHoursSpecification":[{"@type":"OpeningHoursSpecification","dayOfWeek":["Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],"opens":"10:00","closes":"19:00"}],"sameAs":["https://www.instagram.com/pashabeautystudioo/"],"priceRange":"RSD"}</script>
   <script>document.documentElement.classList.add("js");try{if(sessionStorage.getItem("pasha-loaded")||matchMedia("(prefers-reduced-motion: reduce)").matches)document.documentElement.classList.add("no-loader")}catch(e){}</script>
@@ -87,9 +89,9 @@
 <section class="hero" id="pocetna">
   <div class="hero__bg" id="heroBg">
     <div class="hero__fluid" data-fluid></div>
-    <img class="hero__slide is-on" src="images/wa-naslovna-dzep.jpg" alt="Ruka sa šahovskim nail artom i pribor za manikir u džepu farmerki" data-focus="0.42" style="object-position:50% 42%" width="1177" height="1600">
-    <img class="hero__slide" src="images/wa-french-naslovna.jpg" alt="Klasičan beli french na kratkim kvadratnim noktima" data-focus="0.45" style="object-position:50% 45%" loading="lazy" width="1200" height="1245">
-    <img class="hero__slide" src="images/wa-farmerke-cetkice.jpg" alt="Četkice za nail art u džepu vezenih farmerki" data-focus="0.3" style="object-position:50% 30%" loading="lazy" width="1166" height="1600">
+    <img fetchpriority="high" class="hero__slide is-on" src="images/wa-naslovna-dzep.jpg" srcset="images/md/wa-naslovna-dzep.jpg 900w, images/wa-naslovna-dzep.jpg 1177w" sizes="100vw" alt="Ruka sa šahovskim nail artom i pribor za manikir u džepu farmerki" data-focus="0.42" style="object-position:50% 42%" width="1177" height="1600">
+    <img class="hero__slide" src="images/wa-french-naslovna.jpg" srcset="images/md/wa-french-naslovna.jpg 900w, images/wa-french-naslovna.jpg 1200w" sizes="100vw" alt="Klasičan beli french na kratkim kvadratnim noktima" data-focus="0.45" style="object-position:50% 45%" loading="lazy" width="1200" height="1245">
+    <img class="hero__slide" src="images/wa-farmerke-cetkice.jpg" srcset="images/md/wa-farmerke-cetkice.jpg 900w, images/wa-farmerke-cetkice.jpg 1166w" sizes="100vw" alt="Četkice za nail art u džepu vezenih farmerki" data-focus="0.3" style="object-position:50% 30%" loading="lazy" width="1166" height="1600">
   </div>
   <div class="hero__blur" aria-hidden="true"></div>
   <div class="hero__dots" role="tablist" aria-label="Fotografije" data-in style="--d:1.05s">
@@ -110,7 +112,7 @@
       </div>
     </div>
     <a class="hcard" href="galerija.html" data-in style="--d:.95s">
-      <span class="hcard__img"><img src="images/ig-mystical-world.jpg" alt="Takmičarski set Mystical world nails sa 3D insektima" width="1080" height="1124"></span>
+      <span class="hcard__img"><img src="images/thumbs/ig-mystical-world.jpg" alt="Takmičarski set Mystical world nails sa 3D insektima" width="1080" height="1124"></span>
       <span class="hcard__body">
         <span class="hcard__plus"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.75 12h16.5M12 3.75v16.5" stroke="#1b1512" stroke-width="3" stroke-linecap="round" fill="none"/></svg></span>
         <span>
@@ -142,10 +144,10 @@
       </div>
     </div>
     <div class="strip" id="strip">
-      <div class="strip__item"><div class="strip__img" role="img" aria-label="Almond french sa oslikanim cvetićima" style="background-image:url(images/ig-french-cvetici.jpg)"></div><h3>DETALJ</h3></div>
-      <div class="strip__item"><div class="strip__img" role="img" aria-label="Enterijer studija sa stolovima za manikir" style="background-image:url(images/salon-tall.jpg)"></div><h3>STUDIO</h3></div>
-      <div class="strip__item"><div class="strip__img" role="img" aria-label="Nokti Betmen protiv Džokera, ručno crtani" style="background-image:url(images/ig-betmen-dzoker.jpg)"></div><h3>UMETNOST</h3></div>
-      <div class="strip__item"><div class="strip__img" role="img" aria-label="Dugi kvadratni french nokti" style="background-image:url(images/ig-french-dugi.jpg)"></div><h3>REZULTAT</h3></div>
+      <div class="strip__item"><div class="strip__img" role="img" aria-label="Almond french sa oslikanim cvetićima" style="background-image:url(images/thumbs/ig-french-cvetici.jpg)"></div><h3>DETALJ</h3></div>
+      <div class="strip__item"><div class="strip__img" role="img" aria-label="Enterijer studija sa stolovima za manikir" style="background-image:url(images/thumbs/salon-tall.jpg)"></div><h3>STUDIO</h3></div>
+      <div class="strip__item"><div class="strip__img" role="img" aria-label="Nokti Betmen protiv Džokera, ručno crtani" style="background-image:url(images/thumbs/ig-betmen-dzoker.jpg)"></div><h3>UMETNOST</h3></div>
+      <div class="strip__item"><div class="strip__img" role="img" aria-label="Dugi kvadratni french nokti" style="background-image:url(images/thumbs/ig-french-dugi.jpg)"></div><h3>REZULTAT</h3></div>
     </div>
   </div>
 </section>
@@ -165,7 +167,7 @@
     </div>
     <div class="sol-grid">
       <article class="sol" tabindex="0" aria-label="Nokti koji pucaju, kliknite za rešenje">
-        <div class="sol__img"><img src="images/ig-french-dugi.jpg" alt="Izliveni dugi french nokti" loading="lazy" width="1080" height="1080"></div>
+        <div class="sol__img"><img src="images/thumbs/ig-french-dugi.jpg" alt="Izliveni dugi french nokti" loading="lazy" width="1080" height="1080"></div>
         <div class="sol__top"><span class="sol__num">01</span><span class="sol__icon"><span class="ic ic--a" style="--i:url(icons/oblak-munja.svg)"></span><span class="ic ic--b" style="--i:url(icons/oblak-munja.svg)"></span></span></div>
         <div class="sol__text">
           <div class="sol__a"><h3 class="h-card">Nokti koji pucaju</h3><p class="p">Tanki, slabi nokti koji se lome pre nego što stignu da porastu.</p></div>
@@ -174,7 +176,7 @@
         <button class="sol__toggle" aria-label="Prikaži rešenje"><svg viewBox="0 0 24 24"><path d="M6.75 12h10.5M12 6.75v10.5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" fill="none"/></svg></button>
       </article>
       <article class="sol" tabindex="0" aria-label="Lak koji se ljušti, kliknite za rešenje">
-        <div class="sol__img"><img src="images/ig-french-kratki.jpg" alt="Kratki nokti sa french ivicom u braon i zlatnoj boji" loading="lazy" width="1080" height="1080"></div>
+        <div class="sol__img"><img src="images/thumbs/ig-french-kratki.jpg" alt="Kratki nokti sa french ivicom u braon i zlatnoj boji" loading="lazy" width="1080" height="1080"></div>
         <div class="sol__top"><span class="sol__num">02</span><span class="sol__icon"><span class="ic ic--a" style="--i:url(icons/kapi.svg)"></span><span class="ic ic--b" style="--i:url(icons/kapi.svg)"></span></span></div>
         <div class="sol__text">
           <div class="sol__a"><h3 class="h-card">Lak koji se ljušti</h3><p class="p">Gel koji posle par dana počne da puca i odvaja se od nokta.</p></div>
@@ -183,7 +185,7 @@
         <button class="sol__toggle" aria-label="Prikaži rešenje"><svg viewBox="0 0 24 24"><path d="M6.75 12h10.5M12 6.75v10.5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" fill="none"/></svg></button>
       </article>
       <article class="sol" tabindex="0" aria-label="Uvek isti dizajn, kliknite za rešenje">
-        <div class="sol__img"><img src="images/ig-anime.jpg" alt="Anime nokti sa ručno crtanim likovima" loading="lazy" width="1080" height="1080"></div>
+        <div class="sol__img"><img src="images/thumbs/ig-anime.jpg" alt="Anime nokti sa ručno crtanim likovima" loading="lazy" width="1080" height="1080"></div>
         <div class="sol__top"><span class="sol__num">03</span><span class="sol__icon"><span class="ic ic--a" style="--i:url(icons/iskre.svg)"></span><span class="ic ic--b" style="--i:url(icons/iskre.svg)"></span></span></div>
         <div class="sol__text">
           <div class="sol__a"><h3 class="h-card">Uvek isti dizajn</h3><p class="p">Nokti koji izgledaju isto kao kod svih ostalih.</p></div>
@@ -376,10 +378,10 @@
           <p class="p">Hipoalergeni gel lakovi i builder gel, iste marke koje vidite na našim policama.</p>
           <div class="chips"><span class="chip"><span class="ic" style="--i:url(icons/kap.svg)"></span><span>Hipoalergeno</span></span><span class="chip"><span class="ic" style="--i:url(icons/kruna.svg)"></span><span>Salonski kvalitet</span></span><span class="chip"><span class="ic" style="--i:url(icons/kapaljka.svg)"></span><span>Nega kutikule</span></span></div>
         </div>
-        <div class="b-wide__img"><img src="images/lab-queen-polica.jpg" alt="LAB Queen builder gelovi, gel lakovi i ulje za kutikulu na polici studija" loading="lazy" width="610" height="486"></div>
+        <div class="b-wide__img"><img src="images/thumbs/lab-queen-polica.jpg" alt="LAB Queen builder gelovi, gel lakovi i ulje za kutikulu na polici studija" loading="lazy" width="610" height="486"></div>
       </div>
       <div class="b-stat">
-        <div class="stack"><img src="images/ig-stitch.jpg" alt="" loading="lazy" width="1080" height="1082"><img src="images/ig-crtani.jpg" alt="" loading="lazy" width="1080" height="1080"><img src="images/ig-pcela.jpg" alt="" loading="lazy" width="1080" height="1080"></div>
+        <div class="stack"><img src="images/thumbs/ig-stitch.jpg" alt="" loading="lazy" width="1080" height="1082"><img src="images/thumbs/ig-crtani.jpg" alt="" loading="lazy" width="1080" height="1080"><img src="images/thumbs/ig-pcela.jpg" alt="" loading="lazy" width="1080" height="1080"></div>
         <div><p class="count"><span data-count="1800">0</span><span>+</span></p><p class="p">ljudi prati naše radove na Instagramu, a nove setove objavljujemo svake nedelje.</p></div>
       </div>
       <div class="b-photo">
@@ -392,10 +394,10 @@
           <p class="p">Pribor se posle svake klijentkinje steriliše u sterilizatoru na visokoj temperaturi.</p>
           <div class="chips"><span class="chip"><span class="ic" style="--i:url(icons/sprej.svg)"></span><span>Sterilizacija</span></span><span class="chip"><span class="ic" style="--i:url(icons/alati.svg)"></span><span>Čist pribor</span></span><span class="chip"><span class="ic" style="--i:url(icons/kap.svg)"></span><span>Bezbedno</span></span></div>
         </div>
-        <div class="b-wide__img"><img src="images/sterilizator.jpg" alt="Sterilizator za pribor na visokoj temperaturi u studiju" loading="lazy" style="object-position:50% 88%" width="900" height="947"></div>
+        <div class="b-wide__img"><img src="images/thumbs/sterilizator.jpg" alt="Sterilizator za pribor na visokoj temperaturi u studiju" loading="lazy" style="object-position:50% 88%" width="900" height="947"></div>
       </div>
       <div class="b-stat">
-        <div class="avatars"><img src="images/ig-oslikana-lica.jpg" alt="" loading="lazy" width="1080" height="1080"><img src="images/ig-oci-usne.jpg" alt="" loading="lazy" width="1080" height="1149"><img src="images/ig-mystical-world.jpg" alt="" loading="lazy" width="1080" height="1124"><img src="images/ig-horor.jpg" alt="" loading="lazy" width="1080" height="1244"><img src="images/ig-trka.jpg" alt="" loading="lazy" width="1080" height="1127"></div>
+        <div class="avatars"><img src="images/thumbs/ig-oslikana-lica.jpg" alt="" loading="lazy" width="1080" height="1080"><img src="images/thumbs/ig-oci-usne.jpg" alt="" loading="lazy" width="1080" height="1149"><img src="images/thumbs/ig-mystical-world.jpg" alt="" loading="lazy" width="1080" height="1124"><img src="images/thumbs/ig-horor.jpg" alt="" loading="lazy" width="1080" height="1244"><img src="images/thumbs/ig-trka.jpg" alt="" loading="lazy" width="1080" height="1127"></div>
         <div><p class="count"><span>#</span><span data-count="1">0</span></p><p class="p">mesto na Nail Beauty Championship 2026 u Beogradu, za set inspirisan insektima.</p></div>
       </div>
     </div>
@@ -418,9 +420,9 @@
   </div>
   <div class="concept__visual" data-concept-visual>
     <div class="concept__cols">
-      <div class="concept__col"><figure class="concept__img"><img src="images/ig-dual-palme.jpg" alt="Dugi nokti sa oslikanim palmama" loading="lazy" width="1080" height="1080"></figure><span class="concept__gap" aria-hidden="true"></span><figure class="concept__img"><img src="images/ig-horor.jpg" alt="Crno-crveni nokti sa horor motivima" loading="lazy" width="1080" height="1244"></figure></div>
-      <div class="concept__col"><span class="concept__gap" aria-hidden="true"></span><figure class="concept__img"><img src="images/ig-nova-godina.jpg" alt="Novogodišnji nokti sa sjajnim detaljima" loading="lazy" width="1080" height="1246"></figure><span class="concept__gap" aria-hidden="true"></span></div>
-      <div class="concept__col concept__col--3"><figure class="concept__img"><img src="images/ig-halloween-2.jpg" alt="Halloween nokti sa ručno crtanim likovima" loading="lazy" width="1080" height="1164"></figure><span class="concept__gap" aria-hidden="true"></span><figure class="concept__img"><img src="images/ig-french-cvetici.jpg" alt="Almond french sa oslikanim cvetićima" loading="lazy" width="1080" height="1103"></figure></div>
+      <div class="concept__col"><figure class="concept__img"><img src="images/thumbs/ig-dual-palme.jpg" alt="Dugi nokti sa oslikanim palmama" loading="lazy" width="1080" height="1080"></figure><span class="concept__gap" aria-hidden="true"></span><figure class="concept__img"><img src="images/thumbs/ig-horor.jpg" alt="Crno-crveni nokti sa horor motivima" loading="lazy" width="1080" height="1244"></figure></div>
+      <div class="concept__col"><span class="concept__gap" aria-hidden="true"></span><figure class="concept__img"><img src="images/thumbs/ig-nova-godina.jpg" alt="Novogodišnji nokti sa sjajnim detaljima" loading="lazy" width="1080" height="1246"></figure><span class="concept__gap" aria-hidden="true"></span></div>
+      <div class="concept__col concept__col--3"><figure class="concept__img"><img src="images/thumbs/ig-halloween-2.jpg" alt="Halloween nokti sa ručno crtanim likovima" loading="lazy" width="1080" height="1164"></figure><span class="concept__gap" aria-hidden="true"></span><figure class="concept__img"><img src="images/thumbs/ig-french-cvetici.jpg" alt="Almond french sa oslikanim cvetićima" loading="lazy" width="1080" height="1103"></figure></div>
     </div>
   </div>
   <div class="concept__space" aria-hidden="true"></div>
@@ -444,23 +446,23 @@
       </div>
       <div class="orbit__ring">
         <div class="orbit__arm" style="--d:0s"><div><div class="orbit__card"><article class="wcard">
-          <div class="wcard__img"><img src="images/ig-mystical-world.jpg" alt="Takmičarski set sa 3D insektima, jagodama i pečurkom" loading="lazy" width="1080" height="1124"><div class="wcard__over"><span class="wcard__label"><svg viewBox="0 0 24 24"><use href="#star"/></svg>Takmičarski set</span><p>Insekti, jagode i pečurke u 3D, vajani ručno.</p></div></div>
+          <div class="wcard__img"><img src="images/thumbs/ig-mystical-world.jpg" alt="Takmičarski set sa 3D insektima, jagodama i pečurkom" loading="lazy" width="1080" height="1124"><div class="wcard__over"><span class="wcard__label"><svg viewBox="0 0 24 24"><use href="#star"/></svg>Takmičarski set</span><p>Insekti, jagode i pečurke u 3D, vajani ručno.</p></div></div>
           <div class="wcard__who"><b>Mystical world nails</b><span>Nail Beauty Championship 2026</span></div>
         </article></div></div></div>
         <div class="orbit__arm" style="--d:-9.23s"><div><div class="orbit__card"><article class="wcard">
-          <div class="wcard__img"><img src="images/ig-betmen-dzoker.jpg" alt="Nokti sa Betmenom i Džokerom" loading="lazy" width="1080" height="1079"><div class="wcard__over"><span class="wcard__label"><svg viewBox="0 0 24 24"><use href="#star"/></svg>Nail art</span><p>Minimal ili nail art, vi birate, mi stvaramo.</p></div></div>
+          <div class="wcard__img"><img src="images/thumbs/ig-betmen-dzoker.jpg" alt="Nokti sa Betmenom i Džokerom" loading="lazy" width="1080" height="1079"><div class="wcard__over"><span class="wcard__label"><svg viewBox="0 0 24 24"><use href="#star"/></svg>Nail art</span><p>Minimal ili nail art, vi birate, mi stvaramo.</p></div></div>
           <div class="wcard__who"><b>Betmen vs Džoker</b><span>Ručno crtano</span></div>
         </article></div></div></div>
         <div class="orbit__arm" style="--d:-18.46s"><div><div class="orbit__card"><article class="wcard">
-          <div class="wcard__img"><img src="images/ig-anime.jpg" alt="Anime nokti sa crtanim likovima" loading="lazy" width="1080" height="1080"><div class="wcard__over"><span class="wcard__label"><svg viewBox="0 0 24 24"><use href="#star"/></svg>Nail art</span><p>Omiljeni likovi, nacrtani četkicom na noktu.</p></div></div>
+          <div class="wcard__img"><img src="images/thumbs/ig-anime.jpg" alt="Anime nokti sa crtanim likovima" loading="lazy" width="1080" height="1080"><div class="wcard__over"><span class="wcard__label"><svg viewBox="0 0 24 24"><use href="#star"/></svg>Nail art</span><p>Omiljeni likovi, nacrtani četkicom na noktu.</p></div></div>
           <div class="wcard__who"><b>Anime nails</b><span>Ručno crtano</span></div>
         </article></div></div></div>
         <div class="orbit__arm" style="--d:-27.69s"><div><div class="orbit__card"><article class="wcard">
-          <div class="wcard__img"><img src="images/ig-stitch.jpg" alt="Nokti sa likom Stiča" loading="lazy" width="1080" height="1082"><div class="wcard__over"><span class="wcard__label"><svg viewBox="0 0 24 24"><use href="#star"/></svg>Unikatni dizajn</span><p>Dizajn koji oživi nokte u par detalja.</p></div></div>
+          <div class="wcard__img"><img src="images/thumbs/ig-stitch.jpg" alt="Nokti sa likom Stiča" loading="lazy" width="1080" height="1082"><div class="wcard__over"><span class="wcard__label"><svg viewBox="0 0 24 24"><use href="#star"/></svg>Unikatni dizajn</span><p>Dizajn koji oživi nokte u par detalja.</p></div></div>
           <div class="wcard__who"><b>Stitch</b><span>Ručno crtano</span></div>
         </article></div></div></div>
         <div class="orbit__arm" style="--d:-36.92s"><div><div class="orbit__card"><article class="wcard">
-          <div class="wcard__img"><img src="images/ig-trka.jpg" alt="Nokti sa trkačkim motivima i šahovskom zastavicom" loading="lazy" width="1080" height="1127"><div class="wcard__over"><span class="wcard__label"><svg viewBox="0 0 24 24"><use href="#star"/></svg>Nail art</span><p>Brzi automobili i šahovska zastavica.</p></div></div>
+          <div class="wcard__img"><img src="images/thumbs/ig-trka.jpg" alt="Nokti sa trkačkim motivima i šahovskom zastavicom" loading="lazy" width="1080" height="1127"><div class="wcard__over"><span class="wcard__label"><svg viewBox="0 0 24 24"><use href="#star"/></svg>Nail art</span><p>Brzi automobili i šahovska zastavica.</p></div></div>
           <div class="wcard__who"><b>Let's race</b><span>Ručno crtano</span></div>
         </article></div></div></div>
       </div>
@@ -575,16 +577,16 @@
     </div>
     <div class="ticker" id="ticker">
       <div class="ticker__track">
-        <a class="gimg" href="https://www.instagram.com/pashabeautystudioo/" target="_blank" rel="noopener"><img src="images/ig-oslikana-lica.jpg" alt="Nokti sa ručno oslikanim licima i bubamarom" loading="lazy" width="1080" height="1080"><span class="gimg__over"><span class="ic" style="--i:url(icons/instagram-white.svg)"></span></span></a>
-        <a class="gimg gimg--l" href="https://www.instagram.com/pashabeautystudioo/" target="_blank" rel="noopener"><img src="images/ig-3d-cvece.jpg" alt="Šareni nokti sa 3D cvećem i slatkišima" loading="lazy" width="1080" height="1079"><span class="gimg__over"><span class="ic" style="--i:url(icons/instagram-white.svg)"></span></span></a>
-        <a class="gimg" href="https://www.instagram.com/pashabeautystudioo/" target="_blank" rel="noopener"><img src="images/ig-crtani.jpg" alt="Nokti sa likovima iz crtanih filmova" loading="lazy" width="1080" height="1080"><span class="gimg__over"><span class="ic" style="--i:url(icons/instagram-white.svg)"></span></span></a>
-        <a class="gimg gimg--m" href="https://www.instagram.com/pashabeautystudioo/" target="_blank" rel="noopener"><img src="images/ig-oci-usne.jpg" alt="Nokti sa oslikanim očima, usnama i leopard šarom" loading="lazy" width="1080" height="1149"><span class="gimg__over"><span class="ic" style="--i:url(icons/instagram-white.svg)"></span></span></a>
-        <a class="gimg" href="https://www.instagram.com/pashabeautystudioo/" target="_blank" rel="noopener"><img src="images/ig-koktel.jpg" alt="Letnji koktel nokti iznad bazena" loading="lazy" width="1080" height="1152"><span class="gimg__over"><span class="ic" style="--i:url(icons/instagram-white.svg)"></span></span></a>
-        <a class="gimg gimg--l" href="https://www.instagram.com/pashabeautystudioo/" target="_blank" rel="noopener"><img src="images/ig-srca-portreti.jpg" alt="Nokti sa srcima, šahovskim poljima i mini portretima" loading="lazy" width="1080" height="1080"><span class="gimg__over"><span class="ic" style="--i:url(icons/instagram-white.svg)"></span></span></a>
-        <a class="gimg" href="https://www.instagram.com/pashabeautystudioo/" target="_blank" rel="noopener"><img src="images/ig-halloween.jpg" alt="Halloween nokti inspirisani horor filmovima" loading="lazy" width="1080" height="1082"><span class="gimg__over"><span class="ic" style="--i:url(icons/instagram-white.svg)"></span></span></a>
-        <a class="gimg gimg--m" href="https://www.instagram.com/pashabeautystudioo/" target="_blank" rel="noopener"><img src="images/ig-plavo-oko.jpg" alt="Nokti sa plavim motivom oka" loading="lazy" width="1080" height="1082"><span class="gimg__over"><span class="ic" style="--i:url(icons/instagram-white.svg)"></span></span></a>
-        <a class="gimg" href="https://www.instagram.com/pashabeautystudioo/" target="_blank" rel="noopener"><img src="images/ig-bozicni.jpg" alt="Bordo novogodišnji nokti" loading="lazy" width="1080" height="1186"><span class="gimg__over"><span class="ic" style="--i:url(icons/instagram-white.svg)"></span></span></a>
-        <a class="gimg gimg--l" href="https://www.instagram.com/pashabeautystudioo/" target="_blank" rel="noopener"><img src="images/ig-stiletto.jpg" alt="Stiletto nokti sa mešanim motivima" loading="lazy" width="1080" height="1082"><span class="gimg__over"><span class="ic" style="--i:url(icons/instagram-white.svg)"></span></span></a>
+        <a class="gimg" href="https://www.instagram.com/pashabeautystudioo/" target="_blank" rel="noopener"><img src="images/thumbs/ig-oslikana-lica.jpg" alt="Nokti sa ručno oslikanim licima i bubamarom" loading="lazy" width="1080" height="1080"><span class="gimg__over"><span class="ic" style="--i:url(icons/instagram-white.svg)"></span></span></a>
+        <a class="gimg gimg--l" href="https://www.instagram.com/pashabeautystudioo/" target="_blank" rel="noopener"><img src="images/thumbs/ig-3d-cvece.jpg" alt="Šareni nokti sa 3D cvećem i slatkišima" loading="lazy" width="1080" height="1079"><span class="gimg__over"><span class="ic" style="--i:url(icons/instagram-white.svg)"></span></span></a>
+        <a class="gimg" href="https://www.instagram.com/pashabeautystudioo/" target="_blank" rel="noopener"><img src="images/thumbs/ig-crtani.jpg" alt="Nokti sa likovima iz crtanih filmova" loading="lazy" width="1080" height="1080"><span class="gimg__over"><span class="ic" style="--i:url(icons/instagram-white.svg)"></span></span></a>
+        <a class="gimg gimg--m" href="https://www.instagram.com/pashabeautystudioo/" target="_blank" rel="noopener"><img src="images/thumbs/ig-oci-usne.jpg" alt="Nokti sa oslikanim očima, usnama i leopard šarom" loading="lazy" width="1080" height="1149"><span class="gimg__over"><span class="ic" style="--i:url(icons/instagram-white.svg)"></span></span></a>
+        <a class="gimg" href="https://www.instagram.com/pashabeautystudioo/" target="_blank" rel="noopener"><img src="images/thumbs/ig-koktel.jpg" alt="Letnji koktel nokti iznad bazena" loading="lazy" width="1080" height="1152"><span class="gimg__over"><span class="ic" style="--i:url(icons/instagram-white.svg)"></span></span></a>
+        <a class="gimg gimg--l" href="https://www.instagram.com/pashabeautystudioo/" target="_blank" rel="noopener"><img src="images/thumbs/ig-srca-portreti.jpg" alt="Nokti sa srcima, šahovskim poljima i mini portretima" loading="lazy" width="1080" height="1080"><span class="gimg__over"><span class="ic" style="--i:url(icons/instagram-white.svg)"></span></span></a>
+        <a class="gimg" href="https://www.instagram.com/pashabeautystudioo/" target="_blank" rel="noopener"><img src="images/thumbs/ig-halloween.jpg" alt="Halloween nokti inspirisani horor filmovima" loading="lazy" width="1080" height="1082"><span class="gimg__over"><span class="ic" style="--i:url(icons/instagram-white.svg)"></span></span></a>
+        <a class="gimg gimg--m" href="https://www.instagram.com/pashabeautystudioo/" target="_blank" rel="noopener"><img src="images/thumbs/ig-plavo-oko.jpg" alt="Nokti sa plavim motivom oka" loading="lazy" width="1080" height="1082"><span class="gimg__over"><span class="ic" style="--i:url(icons/instagram-white.svg)"></span></span></a>
+        <a class="gimg" href="https://www.instagram.com/pashabeautystudioo/" target="_blank" rel="noopener"><img src="images/thumbs/ig-bozicni.jpg" alt="Bordo novogodišnji nokti" loading="lazy" width="1080" height="1186"><span class="gimg__over"><span class="ic" style="--i:url(icons/instagram-white.svg)"></span></span></a>
+        <a class="gimg gimg--l" href="https://www.instagram.com/pashabeautystudioo/" target="_blank" rel="noopener"><img src="images/thumbs/ig-stiletto.jpg" alt="Stiletto nokti sa mešanim motivima" loading="lazy" width="1080" height="1082"><span class="gimg__over"><span class="ic" style="--i:url(icons/instagram-white.svg)"></span></span></a>
       </div>
     </div>
   </div>
